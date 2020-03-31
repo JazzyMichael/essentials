@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>New Post</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!postForm.valid" (click)="submit()">Submit</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="text-align: center;">
+
+  <form [formGroup]="postForm">
+    <ion-list lines="full">
+
+      <ion-item>
+        <ion-label position="floating">Type of Essential Business</ion-label>
+        <ion-input formControlName="type"></ion-input>
+      </ion-item>
+
+      <!-- <ion-item>
+        <ion-label position="floating">Job or Company</ion-label>
+        <ion-input></ion-input>
+      </ion-item> -->
+
+      <ion-item>
+        <ion-label position="floating">Post Title</ion-label>
+        <ion-input formControlName="title"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Share your story...</ion-label>
+        <ion-textarea formControlName="content" autoGrow rows="5"></ion-textarea>
+      </ion-item>
+
+    </ion-list>
+  </form>
+</ion-content>

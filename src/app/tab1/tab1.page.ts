@@ -1,12 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { PostService } from '../services/post.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit {
+  hideAnnouncement: boolean;
+  posts$: Observable<any>;
 
-  constructor() {}
+  constructor(private postService: PostService) { }
 
+  ngOnInit() {
+    this.posts$ = this.postService.getPosts();
+  }
+
+  loadMore(event: any) {
+    console.log({ loadMore: event });
+    event.target.disabled = true;
+    this.posts$ = this.postService.getMorePosts('', {});
+  }
+
+  changeSort(event: any) {
+    console.log({ changeSort: event });
+  }
 }

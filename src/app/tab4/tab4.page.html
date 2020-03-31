@@ -1,0 +1,68 @@
+<!-- <ion-header>
+
+</ion-header> -->
+
+<ion-content>
+
+  <ion-card *ngIf="auth.user$ | async as user; else noUser">
+    <ion-card-header color="primary">
+      <ion-card-subtitle>Job & Company</ion-card-subtitle>
+      <ion-card-title>Username</ion-card-title>
+      <span style="position: absolute; bottom: 10px; right: 10px;">63 likes, 2 posts</span>
+    </ion-card-header>
+    <br>
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-toggle [(ngModel)]="darkMode" (ngModelChange)="darkToggle()" slot="start"></ion-toggle>
+        <ion-label>Dark Mode</ion-label>
+      </ion-item>
+      <ion-item lines="none" (click)="editInfo()">
+        <ion-label>Edit Info</ion-label>
+        <ion-icon name="chevron-forward" slot="end"></ion-icon>
+      </ion-item>
+      <ion-item lines="none" (click)="viewPosts()">
+        <ion-label>View Your Posts</ion-label>
+        <ion-icon name="chevron-forward" slot="end"></ion-icon>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ng-template #noUser>
+    <div style="text-align: center;">
+      <h4 style="margin: 2em auto;">Login to interact with the community</h4>
+
+      <ion-button expand="block" fill="outline" (click)="auth.login()">
+        Login Anonymously
+        <ion-icon name="log-in-outline" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+  </ng-template>
+
+  <ion-card>
+    <ion-card-content>
+      <br>
+      <p style="text-align: center">Advertisement</p>
+      <br>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>Share</ion-label>
+      <ion-icon slot="end" name="share-social-outline"></ion-icon>
+    </ion-item>
+
+    <ion-item routerLink="/about">
+      <ion-label>About This App</ion-label>
+    </ion-item>
+
+    <ion-item routerLink="/privacy">
+      <ion-label>Privacy Policy</ion-label>
+    </ion-item>
+  
+    <ion-item routerLink="/terms">
+      <ion-label>Terms of Service</ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

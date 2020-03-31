@@ -5,6 +5,30 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+  },
+  {
+    path: 'post-view',
+    loadChildren: () => import('./post-view/post-view.module').then( m => m.PostViewPageModule)
+  },
+  {
+    path: 'about',
+    loadChildren: () => import('./about/about.module').then( m => m.AboutPageModule)
+  },
+  {
+    path: 'privacy',
+    loadChildren: () => import('./privacy/privacy.module').then( m => m.PrivacyPageModule)
+  },
+  {
+    path: 'terms',
+    loadChildren: () => import('./terms/terms.module').then( m => m.TermsPageModule)
+  },
+  {
+    path: 'user-posts',
+    loadChildren: () => import('./user-posts/user-posts.module').then( m => m.UserPostsPageModule)
+  },
+  {
+    path: 'edit-user',
+    loadChildren: () => import('./edit-user/edit-user.module').then( m => m.EditUserPageModule)
   }
 ];
 @NgModule({

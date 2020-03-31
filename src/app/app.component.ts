@@ -23,5 +23,10 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+
+    const darkMode = localStorage.getItem('darkMode');
+    if (darkMode) {
+      document.body.classList.add('dark');
+    }
   }
 }

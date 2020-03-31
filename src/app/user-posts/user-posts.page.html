@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Username's Posts</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <app-thumbnail-list *ngIf="posts$ | async as posts" [posts]="posts"></app-thumbnail-list>
+
+  <br><br>
+
+</ion-content>

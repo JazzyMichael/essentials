@@ -1,17 +1,26 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      Notifications
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" style="text-align: center;">
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <ion-list>
+    <ion-item *ngFor="let item of notifications" (click)="item.read = true">
+      <ion-avatar slot="start">
+        <ion-icon *ngIf="item.read" [name]="item.icon + '-outline'" style="opacity: 0.5;" color="secondary"></ion-icon>
+        <ion-icon *ngIf="!item.read" [name]="item.icon" color="secondary"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <ion-text [color]="item.read ? 'medium' : ''">
+          <h2>{{ item.title }}</h2>
+        </ion-text>
+        <p>{{ item.subtitle }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
 </ion-content>

@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="text-align: center;">
+
+  <ion-card>
+    <ion-card-content>
+      <p>This information is displayed on your posts. Only a username is required, however we encourage adding a bit more context to your experiences.</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list lines="full">
+    <ion-item>
+      <ion-label position="floating">Job</ion-label>
+      <ion-input debounce="1200" (ionChange)="update('job', $event.target.value)"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">Company or Employer</ion-label>
+      <ion-input debounce="1200" (ionChange)="update('company', $event.target.value)"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">State or Country</ion-label>
+      <ion-input debounce="1200" (ionChange)="update('location', $event.target.value)"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">Username</ion-label>
+      <ion-input value="username"></ion-input>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

@@ -1,17 +1,46 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <!-- <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="chevron-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons> -->
+    <ion-searchbar
+      style="text-align: center;"
+      debounce="1000"
+      maxlength="30"
+      (ionChange)="onSearch($event.target.value)"
+      (ionClear)="clearSearch()"
+      [(ngModel)]="term">
+    </ion-searchbar>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="term" style="--min-height: 0; padding-bottom: 4px;">
+    <ion-title size="small" color="medium">Search results for "{{ term }}"</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" style="text-align: center;">
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <ion-list *ngIf="!term && recentSearches?.length">
+    <ion-item-divider>
+      <ion-label>Recent Searches</ion-label>
+    </ion-item-divider>
+    <ion-item *ngFor="let item of recentSearches.slice(0, 10); index as i">
+      <ion-label (click)="searchRecentTerm(item)">{{ item }}</ion-label>
+      <ion-buttons slot="end" (click)="removeTerm(i)">
+        <ion-button color="danger">
+          <ion-icon name="close" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <br>
+
+  <ng-container *ngIf="searchResults$ | async as posts">
+    <app-thumbnail-list [posts]="posts"></app-thumbnail-list>
+
+    <p *ngIf="term && !posts.length">No matches :(</p>
+  </ng-container>
+
 </ion-content>

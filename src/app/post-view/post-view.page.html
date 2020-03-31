@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleFollowing()">
+        <ion-icon *ngIf="following" name="notifications" slot="icon-only"></ion-icon>
+        <ion-icon *ngIf="!following" name="notifications-off" slot="icon-only" style="opacity: 0.5;"></ion-icon>
+      </ion-button>
+      <ion-button (click)="showActions()">
+        <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="margin: 0 1em 2em;">
+    <h1>Post Title</h1>
+    <h4>Type of Work</h4>
+    <p routerLink="/user-posts">Username</p>
+    <hr>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, similique suscipit. Sunt culpa cupiditate suscipit dignissimos quos consequuntur doloribus libero excepturi a. Rem sint ad sapiente nobis qui tempore illum!</p>  
+  </div>
+
+  <ion-card>
+    <ion-card-content>
+      <p style="text-align: center;">32 likes, 4 comments</p>
+      <p style="text-align: center;">Like | Share</p>
+    </ion-card-content>
+  </ion-card>
+
+  <app-comments></app-comments>
+</ion-content>
