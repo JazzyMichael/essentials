@@ -10,11 +10,12 @@ export class AuthService {
   user$: Observable<any>;
 
   constructor(private auth: AngularFireAuth) {
-    this.user$ = this.auth.user.pipe(
-      // switchMap((user: any = {}) => {
-      //   return user.uid ? this.firestore.doc(`users/${user.uid}`).valueChanges() : of(null);
-      // })
-    );
+    this.user$ = this.auth.authState;
+    // this.user$ = this.auth.user.pipe(
+    //   // switchMap((user: any = {}) => {
+    //   //   return user.uid ? this.firestore.doc(`users/${user.uid}`).valueChanges() : of(null);
+    //   // })
+    // );
   }
 
   async login() {
