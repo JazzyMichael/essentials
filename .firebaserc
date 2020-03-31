@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "ionic-essentials"
+  },
+  "targets": {
+    "ionic-essentials": {
+      "hosting": {
+        "app": [
+          "ionic-essentials"
+        ]
+      }
+    }
+  }
+}

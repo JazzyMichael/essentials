@@ -1,32 +1,28 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  user$: BehaviorSubject<any> = new BehaviorSubject(null);
+  user$: Observable<any>;
 
-  constructor() { }
-
-  login() {
-    const user = {
-      uid: 'uid',
-      username: 'usernombre',
-      location: '',
-      job: '',
-      company: '',
-      likes: 6,
-      posts: 2,
-      recentSearches: []
-    };
-
-    this.user$.next(user);
+  constructor(private auth: AngularFireAuth) {
+    this.user$ = this.auth.user.pipe(
+      // switchMap((user: any = {}) => {
+      //   return user.uid ? this.firestore.doc(`users/${user.uid}`).valueChanges() : of(null);
+      // })
+    );
   }
 
-  logout() {
-    this.user$.next(null);
+  async login() {
+    await this.auth.signInAnonymously();
+  }
+
+  async logout() {
+    await this.auth.signOut();
   }
 
 }
