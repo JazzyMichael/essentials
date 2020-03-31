@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 import { PostService } from '../services/post.service';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  selector: 'app-search',
+  templateUrl: 'search.page.html',
+  styleUrls: ['search.page.scss']
 })
-export class Tab2Page implements OnInit {
+export class SearchPage implements OnInit {
   recentSearches: string[];
   searchResults$: Observable<any[]>;
   term: string;

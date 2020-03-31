@@ -11,3 +11,4 @@ A hybrid app for posting anonymous snippets about essential business and pandemi
 - Share
 - Splash Screen
 - Storage
+- Community AdMob

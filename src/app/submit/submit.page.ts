@@ -5,11 +5,11 @@ import { Router } from '@angular/router';
 import { PostService } from '../services/post.service';
 
 @Component({
-  selector: 'app-tab5',
-  templateUrl: './tab5.page.html',
-  styleUrls: ['./tab5.page.scss'],
+  selector: 'app-submit',
+  templateUrl: './submit.page.html',
+  styleUrls: ['./submit.page.scss'],
 })
-export class Tab5Page implements OnInit {
+export class SubmitPage implements OnInit {
   postForm: FormGroup;
 
   constructor(

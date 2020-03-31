@@ -8,61 +8,61 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'home',
         children: [
           {
             path: '',
-            loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+            loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
           }
         ]
       },
       {
-        path: 'tab2',
+        path: 'search',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../search/search.module').then(m => m.SearchPageModule)
           }
         ]
       },
       {
-        path: 'tab3',
+        path: 'notifications',
         children: [
           {
             path: '',
-            loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+            loadChildren: () => import('../notifications/notifications.module').then(m => m.NotificationsPageModule)
           }
         ]
       },
       {
-        path: 'tab4',
+        path: 'user',
         children: [
           {
             path: '',
-            loadChildren: () => import('../tab4/tab4.module').then( m => m.Tab4PageModule)
+            loadChildren: () => import('../user/user.module').then( m => m.UserPageModule)
           }
         ]
       },
       {
-        path: 'tab5',
+        path: 'submit',
         children: [
           {
             path: '',
-            loadChildren: () => import('../tab5/tab5.module').then( m => m.Tab5PageModule)
+            loadChildren: () => import('../submit/submit.module').then( m => m.SubmitPageModule)
           }
         ]
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/home',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/home',
     pathMatch: 'full'
   }
 ];

@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { Tab5PageRoutingModule } from './tab5-routing.module';
+import { SubmitPageRoutingModule } from './submit-routing.module';
 
-import { Tab5Page } from './tab5.page';
+import { SubmitPage } from './submit.page';
 
 @NgModule({
   imports: [
@@ -14,8 +14,8 @@ import { Tab5Page } from './tab5.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    Tab5PageRoutingModule
+    SubmitPageRoutingModule
   ],
-  declarations: [Tab5Page]
+  declarations: [SubmitPage]
 })
-export class Tab5PageModule {}
+export class SubmitPageModule {}

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss']
+  selector: 'app-notifications',
+  templateUrl: 'notifications.page.html',
+  styleUrls: ['notifications.page.scss']
 })
-export class Tab3Page implements OnInit {
+export class NotificationsPage implements OnInit {
   notifications: any[];
 
   constructor() {}

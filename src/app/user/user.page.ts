@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
-  selector: 'app-tab4',
-  templateUrl: './tab4.page.html',
-  styleUrls: ['./tab4.page.scss'],
+  selector: 'app-user',
+  templateUrl: './user.page.html',
+  styleUrls: ['./user.page.scss'],
 })
-export class Tab4Page implements OnInit {
+export class UserPage implements OnInit {
   darkMode: boolean;
 
   constructor(private router: Router, public auth: AuthService) { }
