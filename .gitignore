@@ -32,3 +32,6 @@ npm-debug.log*
 
 /src/environments/**
 .firebase/**
+
+/functions/node_modules/**
+/functions/lib/**
