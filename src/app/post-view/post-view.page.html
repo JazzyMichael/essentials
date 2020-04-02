@@ -16,11 +16,12 @@
 </ion-header>
 
 <ion-content>
-  <div style="margin: 0 1em 2em;">
-    <h1>Post Title</h1>
-    <h4>Type of Work</h4>
-    <p routerLink="/user-posts">Username</p>
+  <div *ngIf="post$ | async as post" style="margin: 0 1em 2em;">
+    <h1>{{ post.title }}</h1>
+    <h4>{{ post.type }}, {{ post.company }}</h4>
+    <p routerLink="/user-posts">Poster Username</p>
     <hr>
+    <p>{{ post.content }}</p>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, similique suscipit. Sunt culpa cupiditate suscipit dignissimos quos consequuntur doloribus libero excepturi a. Rem sint ad sapiente nobis qui tempore illum!</p>  
   </div>
 

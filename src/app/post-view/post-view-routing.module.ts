@@ -5,7 +5,7 @@ import { PostViewPage } from './post-view.page';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':id',
     component: PostViewPage
   }
 ];

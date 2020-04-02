@@ -19,6 +19,10 @@ export class PostService {
     return of([]);
   }
 
+  getPostById(id: string) {
+    return this.firestore.doc(`posts/${id}`).valueChanges();
+  }
+
   getPostsByUserId(id: string) {
     return this.firestore.collection('posts',
       ref => ref.where('userId', '==', id).limit(10)

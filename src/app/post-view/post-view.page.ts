@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController, ActionSheetController } from '@ionic/angular';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { PostService } from '../services/post.service';
 
 @Component({
   selector: 'app-post-view',
@@ -8,14 +11,21 @@ import { ToastController, ActionSheetController } from '@ionic/angular';
 })
 export class PostViewPage implements OnInit {
   following: boolean;
+  post$: Observable<any>;
 
   constructor(
     private toast: ToastController,
-    private actionSheet: ActionSheetController
+    private actionSheet: ActionSheetController,
+    private route: ActivatedRoute,
+    private postService: PostService
   ) { }
 
   ngOnInit() {
     this.following = false;
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.post$ = this.postService.getPostById(id);
+    });
   }
 
   async toggleFollowing() {
