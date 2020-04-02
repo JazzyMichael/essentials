@@ -15,28 +15,26 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-list lines="full">
+  <ion-list *ngIf="user$ | async as user" lines="full">
     <ion-item>
       <ion-label position="floating">Job</ion-label>
-      <ion-input debounce="1200" (ionChange)="update('job', $event.target.value)"></ion-input>
+      <ion-input [value]="user.job" debounce="1200" (ionChange)="update('job', $event.target.value)"></ion-input>
     </ion-item>
   
     <ion-item>
       <ion-label position="floating">Company or Employer</ion-label>
-      <ion-input debounce="1200" (ionChange)="update('company', $event.target.value)"></ion-input>
+      <ion-input [value]="user.company" debounce="1200" (ionChange)="update('company', $event.target.value)"></ion-input>
     </ion-item>
   
     <ion-item>
       <ion-label position="floating">State or Country</ion-label>
-      <ion-input debounce="1200" (ionChange)="update('location', $event.target.value)"></ion-input>
+      <ion-input [value]="user.location" debounce="1200" (ionChange)="update('location', $event.target.value)"></ion-input>
     </ion-item>
   
     <ion-item>
       <ion-label position="floating">Username</ion-label>
-      <ion-input value="username"></ion-input>
+      <ion-input [value]="user.username" debounce="1200" (ionChange)="update('username', $event.target.value)"></ion-input>
     </ion-item>
   </ion-list>
-
-  <!-- <button (click)="logout()">logout</button> -->
 
 </ion-content>

@@ -1,5 +1,17 @@
-<ion-card>
+<ion-item lines="full">
+  <ion-label>Comments</ion-label>
+  <ion-badge *ngIf="commentCount" slot="end">{{ commentCount }}</ion-badge>
+</ion-item>
+
+<ion-item *ngIf="!commentCount" lines="none">
+  <ion-label style="text-align: center;">Be the first to comment on this post!</ion-label>
+</ion-item>
+
+<ion-card *ngFor="let comment of comments$ | async" style="border-left: 2px solid var(--ion-color-primary)">
+  <ion-card-header>
+    <ion-card-subtitle>{{ comment.username }}, 6 hours ago</ion-card-subtitle>
+  </ion-card-header>
   <ion-card-content>
-    <p>Comments Section</p>
+    <p>{{ comment.text }}</p>
   </ion-card-content>
 </ion-card>

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { PostService } from '../services/post.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-submit',
@@ -16,7 +17,8 @@ export class SubmitPage implements OnInit {
     private fb: FormBuilder,
     private toast: ToastController,
     private router: Router,
-    private postService: PostService
+    private postService: PostService,
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -33,22 +35,27 @@ export class SubmitPage implements OnInit {
   }
 
   async submit() {
+    const user = this.auth.user$.getValue();
+    if (!user) {
+      console.log('must be signed in to post');
+      return;
+    }
+
     const post = {
       ...this.postForm.value,
       lowerCaseTitle: this.postForm.value.title.toLowerCase().trim(),
       lowerCaseType: this.postForm.value.type.toLowerCase().trim(),
       lowerCaseCompany: this.postForm.value.company.toLowerCase().trim(),
       createdAt: new Date(),
-      userId: 'userId'
+      userId: user.uid,
+      likes: 0
     };
 
     const { id } = await this.postService.createPost(post);
 
-    console.log(id);
-
     this.postForm.reset();
 
-    this.router.navigateByUrl('/post-view');
+    this.router.navigateByUrl(`/post-view/${id}`);
 
     const toasty = await this.toast.create({
       message: 'Post created!',

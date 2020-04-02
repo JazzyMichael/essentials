@@ -1,5 +1,9 @@
 <div style="display: flex; flex-direction: column;">
 
+  <ion-text *ngIf="!posts.length">
+    <h3 style="text-align: center;">No posts :(</h3>
+  </ion-text>
+
   <ion-card
     *ngFor="let post of posts"
     style="text-align: left; border-left: 4px solid var(--ion-color-primary);"

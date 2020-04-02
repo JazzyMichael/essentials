@@ -17,8 +17,43 @@ export const createUser = functions.auth.user().onCreate((user: any) => {
         uid: user.uid,
         createdAt,
         username,
-        lowerCaseUsername: username.toLowerCase()
+        lowerCaseUsername: username.toLowerCase(),
+        posts: 0,
+        likes: 0
     };
 
     return db.doc(`users/${user.uid}`).set(newUser);
 });
+
+
+
+
+export const createPost = functions.firestore
+    .document('posts/{postId}')
+    .onCreate((snap, context) => {
+        const post = snap.data();
+        if (!post || !post.userId) throw new Error('invalid post');
+        const increment = admin.firestore.FieldValue.increment(1);
+        return db.doc(`users/${post.userId}`).update({ posts: increment });
+    });
+
+
+
+
+export const deletePost = functions.firestore
+    .document('posts/{postId}')
+    .onDelete((snap, context) => {
+        const post = snap.data();
+        if (!post || !post.userId) throw new Error('invalid post');
+        const decrement = admin.firestore.FieldValue.increment(-1);
+        return db.doc(`users/${post.userId}`).update({ posts: decrement });
+    });
+
+// export const createComment = functions.firestore
+//     .document('posts/{postId}/comments/{commentId}')
+//     .onCreate((snap, context) => {
+//         const comment = snap.data();
+//         if (!comment) throw new Error('invalid comment');
+
+//         // add notification to followers
+//     });

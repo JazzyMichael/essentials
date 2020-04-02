@@ -12,7 +12,7 @@
 
 <ion-content style="text-align: center;">
 
-  <form [formGroup]="postForm">
+  <form *ngIf="auth.user$ | async; else noUser" [formGroup]="postForm">
     <ion-list lines="full">
 
       <ion-item>
@@ -37,4 +37,11 @@
 
     </ion-list>
   </form>
+
+  <ng-template #noUser>
+    <ion-item routerLink="/tabs/user" lines="none" style="margin-top: 30vh">
+      <ion-icon size="small" slot="start" name="happy" color="primary"></ion-icon>
+      <ion-label color="primary">Login to write posts!</ion-label>
+    </ion-item>
+  </ng-template>
 </ion-content>

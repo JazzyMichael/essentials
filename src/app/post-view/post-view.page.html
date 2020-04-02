@@ -19,18 +19,40 @@
   <div *ngIf="post$ | async as post" style="margin: 0 1em 2em;">
     <h1>{{ post.title }}</h1>
     <h4>{{ post.type }}, {{ post.company }}</h4>
-    <p routerLink="/user-posts">Poster Username</p>
+    <p [routerLink]="'/user-posts/' + postUserId">Poster Username</p>
     <hr>
     <p>{{ post.content }}</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, similique suscipit. Sunt culpa cupiditate suscipit dignissimos quos consequuntur doloribus libero excepturi a. Rem sint ad sapiente nobis qui tempore illum!</p>  
   </div>
 
-  <ion-card>
-    <ion-card-content>
-      <p style="text-align: center;">32 likes, 4 comments</p>
-      <p style="text-align: center;">Like | Share</p>
-    </ion-card-content>
-  </ion-card>
+  <div style="display: flex; justify-content: space-around;">
+    <ion-button expand="full" style="flex-grow: 1;" (click)="liked = !liked">
+      <span slot="start" style="margin-top: 4px">{{ liked ? 'Liked' : 'Like' }}</span>
+      <ion-icon *ngIf="liked" name="thumbs-up" slot="end"></ion-icon>
+      <ion-icon *ngIf="!liked" name="thumbs-up-outline" slot="end"></ion-icon>
+    </ion-button>
+    <ion-button expand="full" style="flex-grow: 1;">
+      <span slot="start" style="margin-top: 4px">Share</span>
+      <ion-icon name="share-social-outline" slot="end"></ion-icon>
+    </ion-button>
+  </div>
 
-  <app-comments></app-comments>
+  <br><br>
+
+  <app-comments [postId]="postId"></app-comments>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-item *ngIf="auth.user$ | async; else noUser" lines="none">
+      <ion-icon size="small" slot="start" name="chatbubbles" color="primary"></ion-icon>
+      <ion-input [(ngModel)]="comment" placeholder="Write a Comment..."></ion-input>
+      <ion-icon *ngIf="comment?.length" (click)="addComment()" size="small" slot="end" name="paper-plane" color="primary"></ion-icon>
+    </ion-item>
+    <ng-template #noUser>
+      <ion-item routerLink="/tabs/user" lines="none">
+        <ion-icon size="small" slot="start" name="chatbubbles" color="primary"></ion-icon>
+        <ion-label color="primary">Login to Comment</ion-label>
+      </ion-item>
+    </ng-template>
+  </ion-toolbar>
+</ion-footer>

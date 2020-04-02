@@ -29,8 +29,8 @@ export class UserPage implements OnInit {
     this.router.navigateByUrl('/edit-user');
   }
 
-  viewPosts() {
-    this.router.navigateByUrl('/user-posts');
+  viewPosts(id: string) {
+    this.router.navigateByUrl(`/user-posts/${id}`);
   }
 
 }

@@ -3,6 +3,9 @@ import { ToastController, ActionSheetController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PostService } from '../services/post.service';
+import { CommentService } from '../services/comment.service';
+import { AuthService } from '../services/auth.service';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-post-view',
@@ -11,21 +14,33 @@ import { PostService } from '../services/post.service';
 })
 export class PostViewPage implements OnInit {
   following: boolean;
+  liked: boolean;
   post$: Observable<any>;
+  postId: string;
+  postUserId: string;
+  comment: string;
 
   constructor(
     private toast: ToastController,
     private actionSheet: ActionSheetController,
     private route: ActivatedRoute,
-    private postService: PostService
+    private postService: PostService,
+    private commentService: CommentService,
+    private auth: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.following = false;
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      this.post$ = this.postService.getPostById(id);
-    });
+    this.post$ = this.route.paramMap.pipe(
+      switchMap(params => {
+        this.postId = params.get('id');
+        return this.postService.getPostById(this.postId);
+      }),
+      tap(post => {
+        this.postUserId = post.userId;
+      })
+    );
   }
 
   async toggleFollowing() {
@@ -39,29 +54,64 @@ export class PostViewPage implements OnInit {
     toasty.present();
   }
 
+  async addComment() {
+    const { uid, username } = this.auth.user$.getValue();
+    const newComment = {
+      userId: uid,
+      postId: this.postId,
+      username,
+      createdAt: new Date(),
+      text: this.comment
+    };
+    await this.commentService.create(newComment);
+    this.comment = '';
+    const toasty = await this.toast.create({
+      message: 'Comment added!',
+      duration: 1500
+    });
+    toasty.present();
+  }
+
   async showActions() {
-    const actions = await this.actionSheet.create({
-      buttons: [
-        {
-          text: 'Share',
-          icon: 'share-outline',
-          handler: () => {
-            this.sharePost().then(() => {
-              console.log('shared');
-            });
-          }
-        },
-        {
-          text: 'Report',
-          role: 'destructive',
-          icon: 'megaphone-outline',
-          handler: () => {
-            this.reportPost().then(() => {
-              console.log('reported');
-            });
-          }
+    const buttons = [{
+      text: 'Share',
+      role: '',
+      icon: 'share-outline',
+      handler: () => {
+        this.sharePost().then(() => {
+          console.log('shared');
+        });
+      }
+    }];
+
+    const { uid } = this.auth.user$.getValue();
+
+    if (this.postUserId === uid) {
+      buttons.push({
+        text: 'Delete',
+        role: 'destructive',
+        icon: 'trash-bin',
+        handler: () => {
+          this.deletePost().then(() => {
+            console.log('deleted');
+          });
         }
-      ]
+      });
+    } else {
+      buttons.push({
+        text: 'Report',
+        role: 'destructive',
+        icon: 'megaphone-outline',
+        handler: () => {
+          this.reportPost().then(() => {
+            console.log('reported');
+          });
+        }
+      });
+    }
+
+    const actions = await this.actionSheet.create({
+      buttons
     });
     await actions.present();
   }
@@ -74,6 +124,16 @@ export class PostViewPage implements OnInit {
     const toasty = await this.toast.create({
       message: 'Post has been reported.',
       duration: 1234
+    });
+    toasty.present();
+  }
+
+  async deletePost() {
+    await this.postService.deletePost(this.postId);
+    this.router.navigateByUrl('/user');
+    const toasty = await this.toast.create({
+      message: 'Post has been deleted.',
+      duration: 1500
     });
     toasty.present();
   }

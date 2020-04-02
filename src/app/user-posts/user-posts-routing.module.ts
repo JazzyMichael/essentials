@@ -5,7 +5,7 @@ import { UserPostsPage } from './user-posts.page';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':id',
     component: UserPostsPage
   }
 ];
