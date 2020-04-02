@@ -9,12 +9,12 @@
     style="text-align: left; border-left: 4px solid var(--ion-color-primary);"
     [routerLink]="'/post-view/' + post.id">
     <ion-card-header>
-      <ion-card-subtitle>{{ post.company }}, 6 hours ago</ion-card-subtitle>
+      <ion-card-subtitle>{{ post.company || post.type }}, 6 hours ago</ion-card-subtitle>
       <ion-card-title>{{ post.title }}</ion-card-title>
     </ion-card-header>
   
     <ion-card-content>
-      <p>{{ post.content }}</p>
+      <p>{{ post.content.substring(0, 100) }}...</p>
     </ion-card-content>
   </ion-card>
 

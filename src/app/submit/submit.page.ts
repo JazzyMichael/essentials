@@ -45,7 +45,7 @@ export class SubmitPage implements OnInit {
       ...this.postForm.value,
       lowerCaseTitle: this.postForm.value.title.toLowerCase().trim(),
       lowerCaseType: this.postForm.value.type.toLowerCase().trim(),
-      lowerCaseCompany: this.postForm.value.company.toLowerCase().trim(),
+      lowerCaseCompany: (this.postForm.value.company || '').toLowerCase().trim(),
       createdAt: new Date(),
       userId: user.uid,
       likes: 0
