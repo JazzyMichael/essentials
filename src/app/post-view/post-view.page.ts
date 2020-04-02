@@ -6,6 +6,7 @@ import { PostService } from '../services/post.service';
 import { CommentService } from '../services/comment.service';
 import { AuthService } from '../services/auth.service';
 import { switchMap, tap } from 'rxjs/operators';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-post-view',
@@ -26,8 +27,9 @@ export class PostViewPage implements OnInit {
     private route: ActivatedRoute,
     private postService: PostService,
     private commentService: CommentService,
-    private auth: AuthService,
-    private router: Router
+    public auth: AuthService,
+    private router: Router,
+    private notifications: NotificationService
   ) { }
 
   ngOnInit() {
@@ -41,6 +43,48 @@ export class PostViewPage implements OnInit {
         this.postUserId = post.userId;
       })
     );
+  }
+
+  async like(title: string) {
+    const toasty = await this.toast.create({
+      message: 'Liked :)',
+      duration: 1500,
+      position: 'top'
+    });
+    toasty.present();
+    const { uid } = this.auth.user$.getValue();
+    this.liked = true;
+    await this.postService.likePost(this.postId, uid);
+    // TODO update liked data
+    const note = {
+      icon: 'sunny',
+      title,
+      subtitle: 'You liked this post!',
+      route: `/post/${this.postId}`,
+      read: false
+    };
+    await this.notifications.addNotification(uid, note);
+  }
+
+  async unlike(title: string) {
+    const toasty = await this.toast.create({
+      message: 'Unliked :(',
+      duration: 1500,
+      position: 'top'
+    });
+    toasty.present();
+    const { uid } = this.auth.user$.getValue();
+    this.liked = false;
+    await this.postService.unlikePost(this.postId, uid);
+    // TODO update liked data
+    const note = {
+      icon: 'thunderstorm',
+      title,
+      subtitle: 'You unliked this post',
+      route: `/post/${this.postId}`,
+      read: false
+    };
+    await this.notifications.addNotification(uid, note);
   }
 
   async toggleFollowing() {

@@ -8,7 +8,7 @@
 
 <ion-content [fullscreen]="true" style="text-align: center;">
 
-  <ion-list>
+  <ion-list *ngIf="user">
     <ion-item *ngFor="let item of notifications$ | async" (click)="item.read = true">
       <ion-avatar slot="start">
         <ion-icon *ngIf="item.read" [name]="item.icon + '-outline'" style="opacity: 0.5;" color="secondary"></ion-icon>

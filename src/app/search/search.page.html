@@ -38,9 +38,7 @@
   <br>
 
   <ng-container *ngIf="searchResults$ | async as posts">
-    <app-thumbnail-list [posts]="posts"></app-thumbnail-list>
-
-    <p *ngIf="term && !posts.length">No matches :(</p>
+    <app-thumbnail-list *ngIf="term" [posts]="posts"></app-thumbnail-list>
   </ng-container>
 
 </ion-content>

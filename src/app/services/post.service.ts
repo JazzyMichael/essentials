@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
-import { of, forkJoin } from 'rxjs';
+import { of, forkJoin, combineLatest } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { switchMap, tap, distinct } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(
+    private firestore: AngularFirestore,
+    private functions: AngularFireFunctions
+  ) { }
 
-  getPosts(sort: string = 'recent') {
+  getPosts(sort: string = 'createdAt') {
     return this.firestore.collection('posts',
-      ref => ref.orderBy('createdAt').limit(10)
+      ref => ref.orderBy(sort, 'desc').limit(20)
     ).valueChanges({ idField: 'id' });
   }
 
@@ -30,31 +35,23 @@ export class PostService {
   }
 
   getPostsBySearchTerm(term: string = '') {
-    // return term.length ? of(new Array(9)) : of([]);
     const searchTerm = term.toLowerCase().trim();
+    if (!searchTerm) return of([]);
     const title$ = this.firestore.collection('posts',
       ref => ref.where('lowerCaseTitle', '>=', searchTerm).where('lowerCaseTitle', '<=', searchTerm + 'z')
     ).valueChanges({ idField: 'id' });
 
-    return title$;
+    const company$ = this.firestore.collection('posts',
+      ref => ref.where('lowerCaseCompany', '>=', searchTerm).where('lowerCaseCompany', '<=', searchTerm + 'z')
+    ).valueChanges({ idField: 'id' });
 
-    // const type$ = this.firestore.collection('posts',
-    //   ref => ref.where('lowerCaseType', '>=', term + 'z').orderBy('createdAt').limit(10)
-    // );
-
-    // const company$ = this.firestore.collection('posts',
-    //   ref => ref.where('lowerCaseCompany', '>=', term + 'z').orderBy('createdAt').limit(10)
-    // );
-
-    // return forkJoin([title$, type$, company$])
-    //   .pipe(
-    //     switchMap(() => {
-    //       // remove duplicates
-    //     }),
-    //     switchMap(() => {
-    //       // flatten arrays
-    //     })
-    //   );
+    return combineLatest([title$, company$])
+      .pipe(
+        switchMap(([titles, companys]) => {
+          return of([...titles, ...companys]);
+        }),
+        distinct((post: any) => post.id)
+      );
   }
 
   createPost(post: any) {
@@ -66,11 +63,15 @@ export class PostService {
   }
 
   likePost(postId: string, userId: string) {
-    return;
+    return this.functions
+      .httpsCallable('likePost')({ postId, userId })
+      .toPromise();
   }
 
   unlikePost(postId: string, userId: string) {
-    return;
+    return this.functions
+      .httpsCallable('unlikePost')({ postId, userId })
+      .toPromise();
   }
 
   reportPost(postId: string, userId: string) {

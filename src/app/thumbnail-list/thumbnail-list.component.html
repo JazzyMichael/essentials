@@ -8,8 +8,13 @@
     *ngFor="let post of posts"
     style="text-align: left; border-left: 4px solid var(--ion-color-primary);"
     [routerLink]="'/post-view/' + post.id">
+    <ion-badge *ngIf="post.likes" style="position: absolute; top: 1em; right: 1em;">
+      {{ post.likes }}
+      <ion-icon name="thumbs-up"></ion-icon>
+    </ion-badge>
+
     <ion-card-header>
-      <ion-card-subtitle>{{ post.company || post.type }}, 6 hours ago</ion-card-subtitle>
+      <ion-card-subtitle>{{ post.company || post.type }} | {{ post.createdAt.toDate() | date }}</ion-card-subtitle>
       <ion-card-title>{{ post.title }}</ion-card-title>
     </ion-card-header>
   

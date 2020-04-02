@@ -15,17 +15,22 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div *ngIf="post$ | async as post" style="margin: 0 1em 2em;">
+<ion-content *ngIf="post$ | async as post">
+  <div style="margin: 0 1em 2em;">
+    <ion-badge *ngIf="post.likes" style="position: absolute; top: 1em; right: 1em;">
+      {{ post.likes }}
+      <ion-icon name="thumbs-up"></ion-icon>
+    </ion-badge>
     <h1>{{ post.title }}</h1>
     <h4>{{ post.type }}, {{ post.company }}</h4>
     <p [routerLink]="'/user-posts/' + postUserId">Poster Username</p>
+    <p>{{ post.createdAt.toDate() | date:'short' }} {{ post.location || '' }}</p>
     <hr>
     <p>{{ post.content }}</p>
   </div>
 
   <div style="display: flex; justify-content: space-around;">
-    <ion-button expand="full" style="flex-grow: 1;" (click)="liked = !liked">
+    <ion-button expand="full" style="flex-grow: 1;" (click)="liked ? unlike(post.title) : like(post.title)">
       <span slot="start" style="margin-top: 4px">{{ liked ? 'Liked' : 'Like' }}</span>
       <ion-icon *ngIf="liked" name="thumbs-up" slot="end"></ion-icon>
       <ion-icon *ngIf="!liked" name="thumbs-up-outline" slot="end"></ion-icon>

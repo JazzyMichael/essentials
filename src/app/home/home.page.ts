@@ -24,6 +24,6 @@ export class HomePage implements OnInit {
   }
 
   changeSort(event: any) {
-    console.log({ changeSort: event });
+    this.posts$ = this.postService.getPosts(event.target.value);
   }
 }

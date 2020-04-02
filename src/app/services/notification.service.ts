@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -7,28 +8,33 @@ import { BehaviorSubject } from 'rxjs';
 export class NotificationService {
   notifications$: BehaviorSubject<any[]> = new BehaviorSubject([]);
 
-  constructor() {
-    this.notifications$.next([
-      { icon: 'cloudy-night', title: 'Post title', subtitle: 'subtitle of the post truncated alsdkjf a;dklsjf a;slkdfj a;sldkfasd;lfkjsadl;kfsdf', route: '', read: true },
-      { icon: 'chatbox', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: true },
-      { icon: 'alert-circle', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: true },
-      { icon: 'chatbubbles', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: false },
-      { icon: 'cloudy-night', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: true },
-      { icon: 'chatbox', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: false },
-      { icon: 'alert-circle', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: false },
-      { icon: 'chatbubbles', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: false },
-      { icon: 'cloudy-night', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: true },
-      { icon: 'chatbox', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: true },
-      { icon: 'alert-circle', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: false },
-      { icon: 'chatbubbles', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: false },
-      { icon: 'cloudy-night', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: false },
-      { icon: 'chatbox', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: true },
-      { icon: 'alert-circle', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: true },
-      { icon: 'chatbubbles', title: 'Post title', subtitle: 'subtitle of the post truncated', route: '', read: true }
-    ]);
+  constructor(private firestore: AngularFirestore) { }
+
+  markAsRead(userId: string, id: string) {
+    return this.firestore
+      .doc(`users/${userId}/notifications/${id}`)
+      .update({ read: true });
   }
 
-  markAsRead(id: string) {
-    return;
+  getNotifications(userId: string) {
+    if (!userId) return of([]);
+    return this.firestore
+      .collection(`users/${userId}/notifications`, ref => ref.orderBy('createdAt', 'desc'))
+      .valueChanges({ idField: 'id' });
+  }
+
+  async addNotification(userId: string, obj: any) {
+    const notification = {
+      icon: obj.icon || 'cloudy-night',
+      title: obj.title || 'Get notified! This is the title of the post',
+      subtitle: obj.subtitle || 'blah asdt This is a sbutitle that should get trounkeabled and is the default',
+      route: obj.route || '',
+      read: false,
+      createdAt: new Date()
+    };
+
+    await this.firestore
+      .collection(`users/${userId}/notifications`)
+      .add(notification);
   }
 }
