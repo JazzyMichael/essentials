@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
@@ -7,15 +7,19 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class AuthService {
 
-  user$: Observable<any>;
+  user$: BehaviorSubject<any> = new BehaviorSubject(null);
 
   constructor(private auth: AngularFireAuth) {
-    this.user$ = this.auth.authState;
-    // this.user$ = this.auth.user.pipe(
+    this.auth.authState
+    // .pipe(
     //   // switchMap((user: any = {}) => {
     //   //   return user.uid ? this.firestore.doc(`users/${user.uid}`).valueChanges() : of(null);
     //   // })
-    // );
+    // )
+    .subscribe(user => {
+      console.log('user', user);
+      this.user$.next(user);
+    });
   }
 
   async login() {

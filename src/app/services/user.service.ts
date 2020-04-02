@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
+  constructor(private firestore: AngularFirestore) { }
 
-  update(key: string, value: string) {
-    return;
+  update(id: string, key: string, val: string) {
+    return this.firestore.doc(`users/${id}`).update({ [key]: val });
   }
 }

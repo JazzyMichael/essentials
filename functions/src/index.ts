@@ -20,5 +20,5 @@ export const createUser = functions.auth.user().onCreate((user: any) => {
         lowerCaseUsername: username.toLowerCase()
     };
 
-    return db.collection('users').add(newUser);
+    return db.doc(`users/${user.uid}`).set(newUser);
 });
