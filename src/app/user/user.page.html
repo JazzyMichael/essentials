@@ -6,6 +6,7 @@
 
   <ion-card *ngIf="auth.user$ | async as user; else noUser">
     <ion-card-header color="primary">
+      <ion-icon name="color-palette-outline" style="position: absolute; top: 10px; right: 10px; font-size: 32px;"></ion-icon>
       <ion-card-subtitle>Job & Company</ion-card-subtitle>
       <ion-card-title>Username</ion-card-title>
       <span style="position: absolute; bottom: 10px; right: 10px;">63 likes, 2 posts</span>

@@ -26,6 +26,7 @@ export class SubmitPage implements OnInit {
   createForm() {
     this.postForm = this.fb.group({
       type: ['', Validators.required],
+      company: [''],
       title: ['', Validators.required],
       content: ['', Validators.required]
     });
@@ -34,13 +35,16 @@ export class SubmitPage implements OnInit {
   async submit() {
     const post = {
       ...this.postForm.value,
-      lowercaseTitle: this.postForm.value.title.toLowerCase().trim(),
-      lowercaseType: this.postForm.value.type.toLowerCase().trim(),
+      lowerCaseTitle: this.postForm.value.title.toLowerCase().trim(),
+      lowerCaseType: this.postForm.value.type.toLowerCase().trim(),
+      lowerCaseCompany: this.postForm.value.company.toLowerCase().trim(),
       createdAt: new Date(),
       userId: 'userId'
     };
 
-    this.postService.createPost(post);
+    const { id } = await this.postService.createPost(post);
+
+    console.log(id);
 
     this.postForm.reset();
 

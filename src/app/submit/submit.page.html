@@ -17,22 +17,22 @@
 
       <ion-item>
         <ion-label position="floating">Type of Essential Business</ion-label>
-        <ion-input formControlName="type"></ion-input>
+        <ion-input formControlName="type" minlength="3" maxlength="32"></ion-input>
       </ion-item>
 
-      <!-- <ion-item>
-        <ion-label position="floating">Job or Company</ion-label>
-        <ion-input></ion-input>
-      </ion-item> -->
+      <ion-item>
+        <ion-label position="floating">Company</ion-label>
+        <ion-input formControlName="company" minlength="3" maxlength="32"></ion-input>
+      </ion-item>
 
       <ion-item>
         <ion-label position="floating">Post Title</ion-label>
-        <ion-input formControlName="title"></ion-input>
+        <ion-input formControlName="title" minlength="3" maxlength="32"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="floating">Share your story...</ion-label>
-        <ion-textarea formControlName="content" autoGrow rows="5"></ion-textarea>
+        <ion-textarea formControlName="content" autoGrow rows="5" minlength="3"></ion-textarea>
       </ion-item>
 
     </ion-list>

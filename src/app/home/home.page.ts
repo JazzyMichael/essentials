@@ -20,7 +20,7 @@ export class HomePage implements OnInit {
   loadMore(event: any) {
     console.log({ loadMore: event });
     event.target.disabled = true;
-    this.posts$ = this.postService.getMorePosts('', {});
+    // this.posts$ = this.postService.getMorePosts('', {});
   }
 
   changeSort(event: any) {

@@ -5,12 +5,12 @@
     style="text-align: left; border-left: 4px solid var(--ion-color-primary);"
     routerLink="/post-view">
     <ion-card-header>
-      <ion-card-subtitle>Amazon Warehouse, 6 hours ago</ion-card-subtitle>
-      <ion-card-title>The corona is gonna get us!</ion-card-title>
+      <ion-card-subtitle>{{ post.company }}, 6 hours ago</ion-card-subtitle>
+      <ion-card-title>{{ post.title }}</ion-card-title>
     </ion-card-header>
   
     <ion-card-content>
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Adipisci enim sapiente aliquid, pariatur ullam eos et cumque similique vitae unde beatae veniam nobis delectus exercitationem impedit repellendus tempore dolore nostrum.
+      <p>{{ post.content }}</p>
     </ion-card-content>
   </ion-card>
 
