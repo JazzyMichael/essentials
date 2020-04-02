@@ -49,6 +49,22 @@ export const deletePost = functions.firestore
         return db.doc(`users/${post.userId}`).update({ posts: decrement });
     });
 
+
+
+export const likePost = functions.https.onCall(({ postId, userId }) => {
+    if (!postId || !userId) throw new Error('invalid like');
+    console.log(`Post: ${postId} liked by: ${userId}`);
+    const increment = admin.firestore.FieldValue.increment(1);
+    return db.doc(`posts/${postId}`).update({ likes: increment });
+});
+
+export const unlikePost = functions.https.onCall(({ postId, userId }) => {
+    if (!postId || !userId) throw new Error('invalid unlike');
+    console.log(`Post: ${postId} unliked by: ${userId}`);
+    const decrement = admin.firestore.FieldValue.increment(-1);
+    return db.doc(`posts/${postId}`).update({ likes: decrement });
+});
+
 // export const createComment = functions.firestore
 //     .document('posts/{postId}/comments/{commentId}')
 //     .onCreate((snap, context) => {
