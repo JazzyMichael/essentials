@@ -46,13 +46,23 @@ export class PostViewPage implements OnInit {
   }
 
   async like(title: string) {
+    const user = this.auth.user$.getValue();
+    if (!user) {
+      const toa = await this.toast.create({
+        message: 'Login to like posts',
+        duration: 2000,
+        position: 'top'
+      });
+      toa.present();
+      return this.router.navigateByUrl('/tabs/user');
+    }
     const toasty = await this.toast.create({
       message: 'Liked :)',
       duration: 1500,
       position: 'top'
     });
     toasty.present();
-    const { uid } = this.auth.user$.getValue();
+    const uid = user.uid;
     this.liked = true;
     await this.postService.likePost(this.postId, uid);
     // TODO update liked data

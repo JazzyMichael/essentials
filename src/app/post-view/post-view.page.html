@@ -19,7 +19,8 @@
   <div style="margin: 0 1em 2em;">
     <ion-badge *ngIf="post.likes" style="position: absolute; top: 1em; right: 1em;">
       {{ post.likes }}
-      <ion-icon name="thumbs-up"></ion-icon>
+      <ion-icon *ngIf="liked" name="thumbs-up"></ion-icon>
+      <ion-icon *ngIf="!liked" name="thumbs-up-outline"></ion-icon>
     </ion-badge>
     <h1>{{ post.title }}</h1>
     <h4>{{ post.type }}, {{ post.company }}</h4>
