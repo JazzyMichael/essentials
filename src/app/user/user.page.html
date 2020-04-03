@@ -2,7 +2,7 @@
 
   <ion-card *ngIf="auth.user$ | async as user; else noUser">
     <ion-card-header color="primary">
-      <ion-icon name="color-palette-outline" style="position: absolute; top: 10px; right: 10px; font-size: 32px;"></ion-icon>
+      <ion-icon (click)="showColorPopover()" name="color-palette-outline" style="position: absolute; z-index: 20; top: 10px; right: 10px; font-size: 32px;"></ion-icon>
       <ion-card-subtitle>{{ user.job }} {{ user.company }}</ion-card-subtitle>
       <ion-card-title>{{ user.username }}</ion-card-title>
       <span style="position: absolute; bottom: 10px; right: 10px;">{{ user.posts }} {{ user.posts == 0 || user.posts > 1 ? 'posts' : 'post' }}</span>

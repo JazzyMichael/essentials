@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { UserPageRoutingModule } from './user-routing.module';
 
 import { UserPage } from './user.page';
+import { ColorPopoverComponent } from './color-popover/color-popover.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,12 @@ import { UserPage } from './user.page';
     IonicModule,
     UserPageRoutingModule
   ],
-  declarations: [UserPage]
+  declarations: [
+    UserPage,
+    ColorPopoverComponent
+  ],
+  entryComponents: [
+    ColorPopoverComponent
+  ]
 })
 export class UserPageModule {}

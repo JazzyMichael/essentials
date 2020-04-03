@@ -1,0 +1,10 @@
+<ion-list lines="none" style="padding-bottom: 0.5em">
+
+  <ion-list-header style="margin-bottom: 0.5em">Color</ion-list-header>
+
+  <ion-item *ngFor="let color of colors" button (click)="select(color)">
+    <ion-icon [name]="color.icon" slot="start" [ngStyle]="{ 'color': color.hex }"></ion-icon>
+    <ion-label>{{ color.name }}</ion-label>
+  </ion-item>
+
+</ion-list>
