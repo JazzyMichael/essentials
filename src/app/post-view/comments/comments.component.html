@@ -7,7 +7,10 @@
   <ion-label style="text-align: center;">Be the first to comment on this post!</ion-label>
 </ion-item>
 
-<ion-card *ngFor="let comment of comments$ | async" style="border-left: 2px solid var(--ion-color-primary)">
+<ion-card
+  *ngFor="let comment of comments$ | async"
+  style="border-left: 2px solid var(--ion-color-primary)"
+  [routerLink]="'/comment-view/' + comment.postId + '/' + comment.id">
   <ion-card-header>
     <ion-card-subtitle>{{ comment.username }}, 6 hours ago</ion-card-subtitle>
   </ion-card-header>

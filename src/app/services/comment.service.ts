@@ -19,4 +19,28 @@ export class CommentService {
       .collection(`posts/${postId}/comments`)
       .valueChanges({ idField: 'id' });
   }
+
+  getComment(postId: string, commentId: string) {
+    return this.firestore
+      .doc(`posts/${postId}/comments/${commentId}`)
+      .valueChanges();
+  }
+
+  deleteComment(postId: string, commentId: string) {
+    return this.firestore
+      .doc(`posts/${postId}/comments/${commentId}`)
+      .delete();
+  }
+
+  getReplies(postId: string, commentId: string) {
+    return this.firestore
+      .collection(`posts/${postId}/comments/${commentId}/replies`)
+      .valueChanges({ idField: 'id' });
+  }
+
+  reply(postId: string, commentId: string, newReply: any) {
+    return this.firestore
+      .collection(`posts/${postId}/comments/${commentId}/replies`)
+      .add(newReply);
+  }
 }

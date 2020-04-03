@@ -64,6 +64,7 @@ export class PostViewPage implements OnInit {
       read: false
     };
     await this.notifications.addNotification(uid, note);
+    this.following = true;
   }
 
   async unlike(title: string) {
@@ -114,6 +115,7 @@ export class PostViewPage implements OnInit {
       duration: 1500
     });
     toasty.present();
+    this.following = true;
   }
 
   async showActions() {

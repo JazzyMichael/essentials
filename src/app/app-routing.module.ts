@@ -29,6 +29,10 @@ const routes: Routes = [
   {
     path: 'edit-user',
     loadChildren: () => import('./edit-user/edit-user.module').then( m => m.EditUserPageModule)
+  },
+  {
+    path: 'comment-view',
+    loadChildren: () => import('./comment-view/comment-view.module').then( m => m.CommentViewPageModule)
   }
 ];
 @NgModule({

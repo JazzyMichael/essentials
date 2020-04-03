@@ -1,0 +1,17 @@
+<ion-item lines="full">
+  <ion-label>Replies</ion-label>
+  <ion-badge *ngIf="replyCount" slot="end">{{ replyCount }}</ion-badge>
+</ion-item>
+
+<ion-item *ngIf="!replyCount" lines="none">
+  <ion-label style="text-align: center;">Be the first to reply to this comment!</ion-label>
+</ion-item>
+
+<ion-card *ngFor="let reply of replies$ | async" style="border-left: 2px solid var(--ion-color-primary)">
+  <ion-card-header>
+    <ion-card-subtitle>{{ reply.username }} - {{ reply.createdAt.toDate() | date:'medium' }}</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <p>{{ reply.text }}</p>
+  </ion-card-content>
+</ion-card>

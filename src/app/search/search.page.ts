@@ -16,12 +16,7 @@ export class SearchPage implements OnInit {
   constructor(private toast: ToastController, private postService: PostService) {}
 
   ngOnInit() {
-    this.recentSearches = [
-      'zoom employees',
-      'overtime pay',
-      'lunch breaks',
-      'amazon'
-    ];
+    this.recentSearches = [];
   }
 
   onSearch(term: string) {
