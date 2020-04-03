@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../services/post.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -9,21 +9,39 @@ import { Observable } from 'rxjs';
 })
 export class HomePage implements OnInit {
   hideAnnouncement: boolean;
-  posts$: Observable<any>;
+  posts$: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  morePosts$: Observable<any>;
+  sort: string = 'createdAt';
+  lastPost: any;
+  infScr: any;
 
   constructor(private postService: PostService) { }
 
-  ngOnInit() {
-    this.posts$ = this.postService.getPosts();
+  async ngOnInit() {
+    const posts = await this.postService.getFirst(this.sort);
+    this.lastPost = posts[posts.length - 1];
+    this.posts$.next(posts);
   }
 
-  loadMore(event: any) {
-    console.log({ loadMore: event });
-    event.target.disabled = true;
-    // this.posts$ = this.postService.getMorePosts('', {});
+  async loadMore(event: any) {
+    this.infScr = event.target;
+    console.log('loadMore');
+    const posts = await this.postService.getMore(this.sort, this.lastPost);
+    this.lastPost = posts[posts.length - 1];
+    event.target.complete();
+    if (!posts.length) {
+      console.log('done');
+      event.target.disabled = true;
+    }
+    const old = this.posts$.getValue();
+    this.posts$.next([ ...old, ...posts ]);
   }
 
-  changeSort(event: any) {
-    this.posts$ = this.postService.getPosts(event.target.value);
+  async changeSort(event: any) {
+    this.sort = event.target.value;
+    this.infScr.disabled = false;
+    const posts = await this.postService.getFirst(this.sort);
+    this.lastPost = posts[posts.length - 1];
+    this.posts$.next(posts);
   }
 }

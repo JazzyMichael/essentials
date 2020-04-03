@@ -1,7 +1,3 @@
-<!-- <ion-header [translucent]="true">
-
-</ion-header> -->
-
 <ion-content style="text-align: center;">
 
   <div *ngIf="!hideAnnouncement" class="announcement">
@@ -36,8 +32,9 @@
   </ion-segment>
 
   <app-thumbnail-list *ngIf="posts$ | async as posts" [posts]="posts"></app-thumbnail-list>
+  <app-thumbnail-list *ngIf="morePosts$ | async as posts" [posts]="posts"></app-thumbnail-list>
 
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+  <ion-infinite-scroll threshold="150px" (ionInfinite)="loadMore($event)">
     <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
