@@ -63,6 +63,8 @@ export class CommentsComponent implements OnChanges {
       position: 'top'
     });
     toasty.present();
+    comment.likes++;
+    comment.liked = true;
   }
 
   async unlikeComment(comment: any) {
@@ -76,6 +78,8 @@ export class CommentsComponent implements OnChanges {
       position: 'top'
     });
     toasty.present();
+    comment.likes--;
+    comment.liked = false;
   }
 
 }

@@ -76,6 +76,9 @@ export class PostViewPage implements OnInit {
       read: false
     };
     await this.notifications.addNotification(uid, note);
+    const temp = { postId: this.postId };
+    this.postId = '';
+    this.postId = temp.postId;
     this.following = true;
   }
 
@@ -98,6 +101,9 @@ export class PostViewPage implements OnInit {
       read: false
     };
     await this.notifications.addNotification(uid, note);
+    const temp = { postId: this.postId };
+    this.postId = '';
+    this.postId = temp.postId;
   }
 
   async toggleFollowing() {

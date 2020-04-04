@@ -64,6 +64,8 @@ export class RepliesComponent implements OnChanges {
       position: 'top'
     });
     toasty.present();
+    reply.likes++;
+    reply.liked = true;
   }
 
   async unlikeReply(reply: any) {
@@ -77,6 +79,8 @@ export class RepliesComponent implements OnChanges {
       position: 'top'
     });
     toasty.present();
+    reply.likes--;
+    reply.liked = false;
   }
 
 }

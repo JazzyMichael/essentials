@@ -19,9 +19,13 @@
     <p>{{ comment.text }}</p>
   </ion-card-content>
 
-  <ion-badge (click)="toggleLike($event, comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 1em;">
+  <ion-badge *ngIf="!comment.liked" (click)="likeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 1em;">
     {{ comment.likes ? comment.likes : '' }}
-    <ion-icon [name]="comment.liked ? 'thumbs-up' : 'thumbs-up-outline'"></ion-icon>
+    <ion-icon name="thumbs-up-outline"></ion-icon>
+  </ion-badge>
+  <ion-badge *ngIf="comment.liked" (click)="unlikeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 1em;">
+    {{ comment.likes ? comment.likes : '' }}
+    <ion-icon name="thumbs-up"></ion-icon>
   </ion-badge>
 </ion-card>
 
