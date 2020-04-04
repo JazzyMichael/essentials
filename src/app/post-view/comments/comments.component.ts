@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { CommentService } from 'src/app/services/comment.service';
 import { BehaviorSubject } from 'rxjs';
+import { ToastController } from '@ionic/angular';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-comments',
@@ -15,7 +17,11 @@ export class CommentsComponent implements OnChanges {
   sort: string = 'createdAt';
   infScr: any;
 
-  constructor(private commentService: CommentService) { }
+  constructor(
+    private commentService: CommentService,
+    private toast: ToastController,
+    private auth: AuthService
+  ) { }
 
   async ngOnChanges() {
     if (!this.postId) return;
@@ -44,6 +50,32 @@ export class CommentsComponent implements OnChanges {
     const comments = await this.commentService.getComments(this.postId, this.sort);
     this.lastComment = comments[comments.length - 1];
     this.comments$.next(comments);
+  }
+
+  async likeComment(comment: any) {
+    const user = this.auth.user$.getValue();
+    if (!user || !user.uid) return;
+    const uid = user.uid;
+    await this.commentService.likeComment(this.postId, comment.id, uid);
+    const toasty = await this.toast.create({
+      message: 'Liked Comment :)',
+      duration: 1500,
+      position: 'top'
+    });
+    toasty.present();
+  }
+
+  async unlikeComment(comment: any) {
+    const user = this.auth.user$.getValue();
+    if (!user || !user.uid) return;
+    const uid = user.uid;
+    await this.commentService.unlikeComment(this.postId, comment.id, uid);
+    const toasty = await this.toast.create({
+      message: 'Unliked Comment :(',
+      duration: 1500,
+      position: 'top'
+    });
+    toasty.present();
   }
 
 }

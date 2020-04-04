@@ -14,4 +14,12 @@
   <ion-card-content>
     <p>{{ reply.text }}</p>
   </ion-card-content>
+  <ion-badge *ngIf="!reply.liked" (click)="likeReply(reply)" style="position: absolute; bottom: 1em; right: 1em;">
+    {{ reply.likes ? reply.likes : '' }}
+    <ion-icon name="thumbs-up-outline"></ion-icon>
+  </ion-badge>
+  <ion-badge *ngIf="reply.liked" (click)="unlikeReply(reply)" style="position: absolute; bottom: 1em; right: 1em;">
+    {{ reply.likes ? reply.likes : '' }}
+    <ion-icon name="thumbs-up"></ion-icon>
+  </ion-badge>
 </ion-card>

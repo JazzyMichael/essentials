@@ -11,12 +11,18 @@
   *ngFor="let comment of comments$ | async"
   style="border-left: 2px solid var(--ion-color-primary)"
   [routerLink]="'/comment-view/' + comment.postId + '/' + comment.id">
+
   <ion-card-header>
     <ion-card-subtitle>{{ comment.username }}, 6 hours ago</ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>
     <p>{{ comment.text }}</p>
   </ion-card-content>
+
+  <ion-badge (click)="toggleLike($event, comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 1em;">
+    {{ comment.likes ? comment.likes : '' }}
+    <ion-icon [name]="comment.liked ? 'thumbs-up' : 'thumbs-up-outline'"></ion-icon>
+  </ion-badge>
 </ion-card>
 
 <ion-infinite-scroll threshold="150px" (ionInfinite)="loadMore($event)">

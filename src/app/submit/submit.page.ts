@@ -48,7 +48,8 @@ export class SubmitPage implements OnInit {
       lowerCaseCompany: (this.postForm.value.company || '').toLowerCase().trim(),
       createdAt: new Date(),
       userId: user.uid,
-      likes: 0
+      likes: 0,
+      followerIds: []
     };
 
     const { id } = await this.postService.createPost(post);

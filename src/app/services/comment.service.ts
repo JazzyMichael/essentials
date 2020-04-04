@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireFunctions } from '@angular/fire/functions';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -7,7 +8,10 @@ import { map } from 'rxjs/operators';
 })
 export class CommentService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(
+    private firestore: AngularFirestore,
+    private functions: AngularFireFunctions
+  ) { }
 
   snapshotsToArray(snapshots: any) {
     const arrA = [];
@@ -68,23 +72,27 @@ export class CommentService {
   // U-pdate
 
   likeComment(postId: string, commentId: string, userId: string) {
-    // http callable function
-    return Promise.resolve();
+    return this.functions
+      .httpsCallable('likeComment')({ postId, commentId, userId })
+      .toPromise();
   }
 
   unlikeComment(postId: string, commentId: string, userId: string) {
-    // http callable function
-    return Promise.resolve();
+    return this.functions
+      .httpsCallable('unlikeComment')({ postId, commentId, userId })
+      .toPromise();
   }
 
-  likeReply(postId: string, commentId: string, userId: string) {
-    // http callable function
-    return Promise.resolve();
+  likeReply(postId: string, commentId: string, replyId: string, userId: string) {
+    return this.functions
+      .httpsCallable('likeReply')({ postId, commentId, replyId, userId })
+      .toPromise();
   }
 
-  unlikeReply(postId: string, commentId: string, userId: string) {
-    // http callable function
-    return Promise.resolve();
+  unlikeReply(postId: string, commentId: string, replyId: string, userId: string) {
+    return this.functions
+      .httpsCallable('unlikeReply')({ postId, commentId, replyId, userId })
+      .toPromise();
   }
 
   // D-elete

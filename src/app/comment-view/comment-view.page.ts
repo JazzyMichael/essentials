@@ -65,7 +65,8 @@ export class CommentViewPage implements OnInit {
       commentId: this.commentId,
       username,
       createdAt: new Date(),
-      text: this.reply
+      text: this.reply,
+      likes: 0
     };
     await this.commentService.createReply(this.postId, this.commentId, newReply);
     this.reply = '';

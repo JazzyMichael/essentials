@@ -59,7 +59,7 @@ export class PostViewPage implements OnInit {
       return this.router.navigateByUrl('/tabs/user');
     }
     const toasty = await this.toast.create({
-      message: 'Liked :)',
+      message: 'Liked Post :)',
       duration: 1500,
       position: 'top'
     });
@@ -119,7 +119,9 @@ export class PostViewPage implements OnInit {
       postId: this.postId,
       username,
       createdAt: new Date(),
-      text: this.comment
+      text: this.comment,
+      likes: 0,
+      followerIds: []
     };
     await this.commentService.createComment(newComment);
     this.comment = '';
