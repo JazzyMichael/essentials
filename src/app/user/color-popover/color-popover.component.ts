@@ -25,6 +25,8 @@ export class ColorPopoverComponent {
     document.documentElement.style.setProperty('--ion-color-primary-shade', shade);
     document.documentElement.style.setProperty('--ion-color-primary-tint', tint);
 
+    localStorage.setItem('primary-color', JSON.stringify({ hex, rgb, shade, tint }));
+
     await this.popover.dismiss();
   }
 

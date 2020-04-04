@@ -24,9 +24,17 @@ export class AppComponent {
       this.splashScreen.hide();
     });
 
+    // TODO switch localstorage to Capacitor Storage Plugin
     const darkMode = localStorage.getItem('darkMode');
-    if (darkMode) {
-      document.body.classList.add('dark');
+    if (darkMode) document.body.classList.add('dark');
+
+    const primaryColor = localStorage.getItem('primary-color');
+    if (primaryColor) {
+      const { hex, rgb, shade, tint } = JSON.parse(primaryColor);
+      document.documentElement.style.setProperty('--ion-color-primary', hex);
+      document.documentElement.style.setProperty('--ion-color-primary-rgb', rgb);
+      document.documentElement.style.setProperty('--ion-color-primary-shade', shade);
+      document.documentElement.style.setProperty('--ion-color-primary-tint', tint);
     }
   }
 }
