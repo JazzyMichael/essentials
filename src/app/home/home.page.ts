@@ -25,12 +25,13 @@ export class HomePage implements OnInit {
 
   async loadMore(event: any) {
     this.infScr = event.target;
-    console.log('loadMore');
-    const posts = await this.postService.getMore(this.sort, this.lastPost);
+    console.log('loading more');
+    const posts = this.sort === 'featured'
+      ? await this.postService.getMoreFeatured(this.lastPost)
+      : await this.postService.getMore(this.sort, this.lastPost);
     this.lastPost = posts[posts.length - 1];
     event.target.complete();
     if (!posts.length) {
-      console.log('done');
       event.target.disabled = true;
     }
     const old = this.posts$.getValue();
@@ -39,8 +40,10 @@ export class HomePage implements OnInit {
 
   async changeSort(event: any) {
     this.sort = event.target.value;
-    this.infScr.disabled = false;
-    const posts = await this.postService.getFirst(this.sort);
+    if (this.infScr) this.infScr.disabled = false;
+    const posts = this.sort === 'featured'
+      ? await this.postService.getFirstFeatured()
+      : await this.postService.getFirst(this.sort);
     this.lastPost = posts[posts.length - 1];
     this.posts$.next(posts);
   }

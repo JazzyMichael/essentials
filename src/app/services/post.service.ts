@@ -14,41 +14,45 @@ export class PostService {
     private functions: AngularFireFunctions
   ) { }
 
-  getPosts(sort: string = 'createdAt') {
-    return this.firestore.collection('posts',
-      ref => ref.orderBy(sort, 'desc').limit(4)
-    ).valueChanges({ idField: 'id' });
+  snapshotsToArray(snapshots: any) {
+    const arrA = [];
+    snapshots.forEach(doc => {
+      arrA.push({ id: doc.id, ...doc.data() });
+    });
+    return arrA;
   }
 
   getFirst(sort: string) {
     return this.firestore.collection('posts',
-    ref => ref.orderBy(sort, 'desc').limit(4)
-  ).get().pipe(map(snapshots => {
-    const arr = [];
-    snapshots.forEach(doc => {
-      arr.push({ id: doc.id, ...doc.data() });
-    });
-    return arr;
-  })).toPromise();
+        ref => ref.orderBy(sort, 'desc').limit(6)
+      ).get()
+      .pipe(map(this.snapshotsToArray))
+      .toPromise();
   }
 
   getMore(sort: string, last: any) {
-    return this.firestore.collection('posts',
-      ref => ref.orderBy(sort, 'desc').startAfter(last[sort]).limit(4)
-    ).get().pipe(map(snapshots => {
-      const arr = [];
-      snapshots.forEach(doc => {
-        arr.push({ id: doc.id, ...doc.data() });
-      });
-      return arr;
-    })).toPromise();
+    return this.firestore.collection('posts', ref =>
+      ref.orderBy(sort, 'desc').startAfter(last[sort]).limit(4)
+    ).get().pipe(map(this.snapshotsToArray)).toPromise();
   }
 
-  getMorePosts(sort: string = 'createdAt', lastPost: any) {
-    console.log('service', sort, lastPost);
-    return this.firestore.collection('posts',
-      ref => ref.orderBy(sort).startAfter(lastPost[sort]).limit(4)
-    ).valueChanges({ idField: 'id' });
+  getFirstFeatured() {
+    return this.firestore
+      .collection('posts', ref =>
+        ref.where('featured', '==', true)
+          .orderBy('createdAt', 'desc')
+          .limit(6)
+      ).get().pipe(map(this.snapshotsToArray)).toPromise();
+  }
+
+  getMoreFeatured(lastPost: any) {
+    return this.firestore
+      .collection('posts', ref =>
+        ref.where('featured', '==', true)
+          .orderBy('createdAt', 'desc')
+          .startAfter(lastPost.createdAt)
+          .limit(4)
+      ).get().pipe(map(this.snapshotsToArray)).toPromise();
   }
 
   getPostById(id: string) {
@@ -105,9 +109,5 @@ export class PostService {
     return this.functions
       .httpsCallable('unlikePost')({ postId, userId })
       .toPromise();
-  }
-
-  reportPost(postId: string, userId: string) {
-    return;
   }
 }
