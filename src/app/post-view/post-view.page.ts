@@ -8,6 +8,7 @@ import { AuthService } from '../services/auth.service';
 import { switchMap, tap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ReportService } from 'src/app/services/report.service';
+import { FollowService } from '../services/follow.service';
 
 @Component({
   selector: 'app-post-view',
@@ -31,7 +32,8 @@ export class PostViewPage implements OnInit {
     public auth: AuthService,
     private router: Router,
     private notifications: NotificationService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private follow: FollowService
   ) { }
 
   ngOnInit() {
@@ -67,7 +69,9 @@ export class PostViewPage implements OnInit {
     const uid = user.uid;
     this.liked = true;
     await this.postService.likePost(this.postId, uid);
-    // TODO update liked data
+    console.log('liked');
+    await this.follow.addFollower(`posts/${this.postId}`, uid);
+    console.log('followed');
     const note = {
       icon: 'sunny',
       title,
@@ -76,6 +80,7 @@ export class PostViewPage implements OnInit {
       read: false
     };
     await this.notifications.addNotification(uid, note);
+    console.log('notified');
     const temp = { postId: this.postId };
     this.postId = '';
     this.postId = temp.postId;
@@ -92,7 +97,9 @@ export class PostViewPage implements OnInit {
     const { uid } = this.auth.user$.getValue();
     this.liked = false;
     await this.postService.unlikePost(this.postId, uid);
-    // TODO update liked data
+    console.log('unliked');
+    await this.follow.removeFollower(`posts/${this.postId}`, uid);
+    console.log('unfollowed');
     const note = {
       icon: 'thunderstorm',
       title,
@@ -101,16 +108,26 @@ export class PostViewPage implements OnInit {
       read: false
     };
     await this.notifications.addNotification(uid, note);
+    console.log('notified');
     const temp = { postId: this.postId };
     this.postId = '';
     this.postId = temp.postId;
   }
 
-  async toggleFollowing() {
-    const oldStatus = this.following;
-    this.following = !this.following;
+  async toggleFollowing(follow: boolean) {
+    const { uid } = (this.auth.user$.getValue() || { uid: null });
+
+    if (!uid) return;
+
+    if (follow) {
+      await this.follow.addFollower(`posts/${this.postId}`, uid);
+      console.log('followed');
+    } else {
+      await this.follow.removeFollower(`posts/${this.postId}`, uid);
+      console.log('unfollowed');
+    }
     const toasty = await this.toast.create({
-      message: oldStatus ? 'Stopped following :(' : 'Following!',
+      message: follow ? 'Following!' : 'Stopped following :(',
       duration: 1000,
       position: 'top'
     });
@@ -130,6 +147,7 @@ export class PostViewPage implements OnInit {
       followerIds: []
     };
     await this.commentService.createComment(newComment);
+    console.log('commented');
     this.comment = '';
     const temp = { postId: this.postId };
     this.postId = '';
@@ -138,6 +156,8 @@ export class PostViewPage implements OnInit {
       duration: 1500
     });
     toasty.present();
+    await this.follow.addFollower(`posts/${this.postId}`, uid);
+    console.log('followed');
     this.following = true;
     this.postId = temp.postId;
   }
