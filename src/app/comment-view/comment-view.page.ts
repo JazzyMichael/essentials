@@ -37,7 +37,7 @@ export class CommentViewPage implements OnInit {
       switchMap(params => {
         this.postId = params.get('postId');
         this.commentId = params.get('commentId');
-        return this.commentService.getComment(this.postId, this.commentId);
+        return this.commentService.watchComment(this.postId, this.commentId);
       }),
       tap(comment => {
         this.commentUserId = comment.userId;
@@ -57,6 +57,7 @@ export class CommentViewPage implements OnInit {
   }
 
   async addReply() {
+    if (!this.reply) return;
     const { uid, username } = this.auth.user$.getValue();
     const newReply = {
       userId: uid,
@@ -66,14 +67,19 @@ export class CommentViewPage implements OnInit {
       createdAt: new Date(),
       text: this.reply
     };
-    await this.commentService.reply(this.postId, this.commentId, newReply);
+    await this.commentService.createReply(this.postId, this.commentId, newReply);
     this.reply = '';
+    const temp = { postId: this.postId, commentId: this.commentId };
+    this.postId = '';
+    this.commentId = '';
     const toasty = await this.toast.create({
       message: 'Reply added!',
       duration: 1500
     });
     toasty.present();
     this.following = true;
+    this.postId = temp.postId;
+    this.commentId = temp.commentId;
   }
 
   async showActions() {

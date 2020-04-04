@@ -1,6 +1,6 @@
 <ion-item lines="full">
   <ion-label>Comments</ion-label>
-  <ion-badge *ngIf="commentCount" slot="end">{{ commentCount }}</ion-badge>
+  <ion-badge *ngIf="commentCount" slot="end">{{ commentCount }}+</ion-badge>
 </ion-item>
 
 <ion-item *ngIf="!commentCount" lines="none">
@@ -18,3 +18,7 @@
     <p>{{ comment.text }}</p>
   </ion-card-content>
 </ion-card>
+
+<ion-infinite-scroll threshold="150px" (ionInfinite)="loadMore($event)">
+  <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+</ion-infinite-scroll>

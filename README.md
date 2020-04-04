@@ -1,14 +1,14 @@
-# (In Progress)
-
+# Essentials Anonymous
 
 ## Ionic, Angular, Capacitor, Firebase
 A hybrid app for posting anonymous snippets about essential business and pandemic related topics.
 
-
-### Capacitor Plugins
-- Device
-- Push Notifications
+### Current Capacitor Plugins
 - Share
 - Splash Screen
 - Storage
-- Community AdMob
+- AdMob (community)
+
+### Potential Future Capacitor Plugins
+- Device
+- Push Notifications

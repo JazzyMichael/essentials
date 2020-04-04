@@ -10,7 +10,6 @@ import { Observable, BehaviorSubject } from 'rxjs';
 export class HomePage implements OnInit {
   hideAnnouncement: boolean;
   posts$: BehaviorSubject<any[]> = new BehaviorSubject([]);
-  morePosts$: Observable<any>;
   sort: string = 'createdAt';
   lastPost: any;
   infScr: any;
@@ -24,8 +23,8 @@ export class HomePage implements OnInit {
   }
 
   async loadMore(event: any) {
-    this.infScr = event.target;
     console.log('loading more');
+    this.infScr = event.target;
     const posts = this.sort === 'featured'
       ? await this.postService.getMoreFeatured(this.lastPost)
       : await this.postService.getMore(this.sort, this.lastPost);

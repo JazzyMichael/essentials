@@ -112,6 +112,7 @@ export class PostViewPage implements OnInit {
   }
 
   async addComment() {
+    if (!this.comment) return;
     const { uid, username } = this.auth.user$.getValue();
     const newComment = {
       userId: uid,
@@ -120,14 +121,17 @@ export class PostViewPage implements OnInit {
       createdAt: new Date(),
       text: this.comment
     };
-    await this.commentService.create(newComment);
+    await this.commentService.createComment(newComment);
     this.comment = '';
+    const temp = { postId: this.postId };
+    this.postId = '';
     const toasty = await this.toast.create({
       message: 'Comment added!',
       duration: 1500
     });
     toasty.present();
     this.following = true;
+    this.postId = temp.postId;
   }
 
   async showActions() {

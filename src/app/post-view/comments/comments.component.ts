@@ -1,24 +1,49 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CommentService } from 'src/app/services/comment.service';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss'],
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent implements OnChanges {
   @Input() postId: string;
-  comments$: Observable<any[]>;
+  comments$: BehaviorSubject<any[]> = new BehaviorSubject([]);
   commentCount: number;
+  lastComment: any;
+  sort: string = 'createdAt';
+  infScr: any;
 
   constructor(private commentService: CommentService) { }
 
-  ngOnInit() {
-    this.comments$ = this.commentService.getComments(this.postId).pipe(
-      tap((arr: any[] = []) => this.commentCount = arr.length)
-    );
+  async ngOnChanges() {
+    if (!this.postId) return;
+    const comments = await this.commentService.getComments(this.postId, this.sort);
+    this.lastComment = comments[comments.length - 1];
+    this.commentCount = comments.length;
+    this.comments$.next(comments);
+  }
+
+  async loadMore(event: any) {
+    console.log('loading more');
+    this.infScr = event.target;
+    const comments = await this.commentService.getMoreComments(this.postId, this.sort, this.lastComment);
+    this.lastComment = comments[comments.length - 1];
+    event.target.complete();
+    if (!comments.length) {
+      event.target.disabled = true;
+    }
+    const old = this.comments$.getValue();
+    this.comments$.next([ ...old, ...comments ]);
+  }
+
+  async changeSort(event: any) {
+    this.sort = event.target.value;
+    if (this.infScr) this.infScr.disabled = false;
+    const comments = await this.commentService.getComments(this.postId, this.sort);
+    this.lastComment = comments[comments.length - 1];
+    this.comments$.next(comments);
   }
 
 }

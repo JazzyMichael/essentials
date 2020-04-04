@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -8,23 +9,85 @@ export class CommentService {
 
   constructor(private firestore: AngularFirestore) { }
 
-  create(obj: any) {
+  snapshotsToArray(snapshots: any) {
+    const arrA = [];
+    snapshots.forEach(doc => {
+      arrA.push({ id: doc.id, ...doc.data() });
+    });
+    return arrA;
+  }
+
+  // C-reate
+
+  createComment(obj: any) {
+    // TODO: updated post comment count
     return this.firestore
       .collection(`posts/${obj.postId}/comments`)
       .add(obj);
   }
 
-  getComments(postId: string) {
+  createReply(postId: string, commentId: string, newReply: any) {
+    // TODO: updated post comment count
     return this.firestore
-      .collection(`posts/${postId}/comments`)
-      .valueChanges({ idField: 'id' });
+      .collection(`posts/${postId}/comments/${commentId}/replies`)
+      .add(newReply);
   }
 
-  getComment(postId: string, commentId: string) {
+  // R-ead
+
+  getComments(postId: string, sort: string) {
+    return this.firestore.collection(`posts/${postId}/comments`,
+      ref => ref.orderBy(sort, 'desc').limit(6)
+    ).get().pipe(map(this.snapshotsToArray)).toPromise();
+  }
+
+  getMoreComments(postId: string, sort: string, lastComment: any) {
+    return this.firestore.collection(`posts/${postId}/comments`, ref =>
+      ref.orderBy(sort, 'desc').startAfter(lastComment[sort]).limit(4)
+    ).get().pipe(map(this.snapshotsToArray)).toPromise();
+  }
+
+  getReplies(postId: string, commentId: string, sort: string) {
+    return this.firestore.collection(`posts/${postId}/comments/${commentId}/replies`,
+      ref => ref.orderBy(sort, 'desc').limit(6)
+    ).get().pipe(map(this.snapshotsToArray)).toPromise();
+  }
+
+  getMoreReplies(postId: string, commentId: string, sort: string, lastReply: any) {
+    return this.firestore.collection(`posts/${postId}/comments/${commentId}/replies`, ref =>
+      ref.orderBy(sort, 'desc').startAfter(lastReply[sort]).limit(4)
+    ).get().pipe(map(this.snapshotsToArray)).toPromise();
+  }
+
+  watchComment(postId: string, commentId: string) {
     return this.firestore
       .doc(`posts/${postId}/comments/${commentId}`)
       .valueChanges();
   }
+
+  // U-pdate
+
+  likeComment(postId: string, commentId: string, userId: string) {
+    // http callable function
+    return Promise.resolve();
+  }
+
+  unlikeComment(postId: string, commentId: string, userId: string) {
+    // http callable function
+    return Promise.resolve();
+  }
+
+  likeReply(postId: string, commentId: string, userId: string) {
+    // http callable function
+    return Promise.resolve();
+  }
+
+  unlikeReply(postId: string, commentId: string, userId: string) {
+    // http callable function
+    return Promise.resolve();
+  }
+
+  // D-elete
 
   deleteComment(postId: string, commentId: string) {
     return this.firestore
@@ -32,15 +95,9 @@ export class CommentService {
       .delete();
   }
 
-  getReplies(postId: string, commentId: string) {
+  deleteReply(postId: string, commentId: string, replyId: string) {
     return this.firestore
-      .collection(`posts/${postId}/comments/${commentId}/replies`)
-      .valueChanges({ idField: 'id' });
-  }
-
-  reply(postId: string, commentId: string, newReply: any) {
-    return this.firestore
-      .collection(`posts/${postId}/comments/${commentId}/replies`)
-      .add(newReply);
+      .doc(`posts/${postId}/comments/${commentId}/replies/${replyId}`)
+      .delete();
   }
 }
