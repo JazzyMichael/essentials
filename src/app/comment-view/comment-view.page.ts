@@ -5,6 +5,7 @@ import { ToastController, ActionSheetController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
 import { CommentService } from '../services/comment.service';
+import { ReportService } from '../services/report.service';
 
 @Component({
   selector: 'app-comment-view',
@@ -27,7 +28,8 @@ export class CommentViewPage implements OnInit {
     private auth: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private reportService: ReportService
   ) { }
 
   ngOnInit() {
@@ -120,6 +122,15 @@ export class CommentViewPage implements OnInit {
   }
 
   async reportComment() {
+    const user = this.auth.user$.getValue();
+    const report = {
+      type: 'comment',
+      postId: this.postId,
+      commentId: this.commentId,
+      commentUserId: this.commentUserId,
+      userId: user ? user.uid : ''
+    };
+    await this.reportService.add(report);
     const toasty = await this.toast.create({
       message: 'Comment has been reported.',
       duration: 1234

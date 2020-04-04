@@ -6,7 +6,8 @@ import { PostService } from '../services/post.service';
 import { CommentService } from '../services/comment.service';
 import { AuthService } from '../services/auth.service';
 import { switchMap, tap } from 'rxjs/operators';
-import { NotificationService } from '../services/notification.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { ReportService } from 'src/app/services/report.service';
 
 @Component({
   selector: 'app-post-view',
@@ -29,7 +30,8 @@ export class PostViewPage implements OnInit {
     private commentService: CommentService,
     public auth: AuthService,
     private router: Router,
-    private notifications: NotificationService
+    private notifications: NotificationService,
+    private reportService: ReportService
   ) { }
 
   ngOnInit() {
@@ -177,6 +179,14 @@ export class PostViewPage implements OnInit {
   }
 
   async reportPost() {
+    const user = this.auth.user$.getValue();
+    const report = {
+      type: 'post',
+      postId: this.postId,
+      postUserId: this.postUserId,
+      userId: user ? user.uid : ''
+    };
+    await this.reportService.add(report);
     const toasty = await this.toast.create({
       message: 'Post has been reported.',
       duration: 1234
