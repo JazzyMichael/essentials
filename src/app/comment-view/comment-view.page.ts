@@ -24,6 +24,7 @@ export class CommentViewPage implements OnInit {
   commentUserId: string;
   commentFollowerIds: string[];
   postId: string;
+  postUserId: string;
   reply: string;
 
   constructor(
@@ -48,6 +49,7 @@ export class CommentViewPage implements OnInit {
       }),
       tap(comment => {
         this.commentUserId = comment.userId;
+        this.postUserId = comment.postUserId;
         this.commentFollowerIds = comment.followerIds && comment.followerIds.length ? comment.followerIds : [];
         const user = this.auth.user$.getValue();
         this.following = user && user.uid && this.commentFollowerIds.includes(user.uid);
@@ -90,6 +92,8 @@ export class CommentViewPage implements OnInit {
       userId: uid,
       postId: this.postId,
       commentId: this.commentId,
+      postUserId: this.postUserId,
+      commentUserId: this.commentUserId,
       username,
       createdAt: new Date(),
       text: this.reply,

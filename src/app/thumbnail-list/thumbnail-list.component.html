@@ -6,7 +6,8 @@
 
   <ion-card
     *ngFor="let post of posts"
-    style="text-align: left; border-left: 4px solid var(--ion-color-primary);"
+    style="text-align: left;"
+    [ngStyle]="{ 'border-left': post.userId === userId ? '16px solid var(--ion-color-secondary)' : '8px solid var(--ion-color-primary)' }"
     [routerLink]="'/post-view/' + post.id">
     <ion-badge *ngIf="post.likes" style="position: absolute; top: 1em; right: 1em;">
       {{ post.likes }}
@@ -19,7 +20,8 @@
     </ion-card-header>
   
     <ion-card-content>
-      <p>{{ post.content.substring(0, 100) }}...</p>
+      <p *ngIf="post.userId !== userId">{{ post.content.substring(0, 100) }}...</p>
+      <p *ngIf="post.userId === userId">(your post)</p>
     </ion-card-content>
   </ion-card>
 

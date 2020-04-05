@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, Input, OnChanges, OnInit, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommentService } from 'src/app/services/comment.service';
 import { ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
@@ -10,21 +10,36 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './replies.component.html',
   styleUrls: ['./replies.component.scss'],
 })
-export class RepliesComponent implements OnChanges {
+export class RepliesComponent implements OnInit, OnDestroy, OnChanges {
   @Input() postId: string;
   @Input() commentId: string;
+  @Input() postUserId: string;
+  @Input() commentUserId: string;
+
   replies$: BehaviorSubject<any[]> = new BehaviorSubject([]);
   replyCount: number;
   lastReply: any;
   sort: string = 'createdAt';
   infScr: any;
+  userSub: Subscription;
+  user: any;
 
   constructor(
     private commentService: CommentService,
     private toast: ToastController,
     private auth: AuthService,
-    private user: UserService
+    private userService: UserService
   ) { }
+
+  ngOnInit() {
+    this.userSub = this.auth.user$.subscribe(user => {
+      this.user = user;
+    });
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
+  }
 
   async ngOnChanges() {
     if (!this.postId || !this.commentId) return;
@@ -61,9 +76,8 @@ export class RepliesComponent implements OnChanges {
   }
 
   async likeReply(reply: any) {
-    const user = this.auth.user$.getValue();
-    if (!user || !user.uid) return;
-    const uid = user.uid;
+    if (!this.user) return;
+    const uid = this.user.uid;
     const toasty = await this.toast.create({
       message: 'Liked Comment :)',
       duration: 1500,
@@ -74,14 +88,13 @@ export class RepliesComponent implements OnChanges {
     reply.liked = true;
     await this.commentService.likeReply(this.postId, this.commentId, reply.id, uid);
     console.log('liked');
-    await this.user.update(uid, 'likedReplyIds', [ ...user.likedReplyIds.slice(-99), reply.id ]);
+    await this.userService.update(uid, 'likedReplyIds', [ ...this.user.likedReplyIds.slice(-99), reply.id ]);
     console.log('updated user likedReplyIds');
   }
 
   async unlikeReply(reply: any) {
-    const user = this.auth.user$.getValue();
-    if (!user || !user.uid) return;
-    const uid = user.uid;
+    if (!this.user) return;
+    const uid = this.user.uid;
     const toasty = await this.toast.create({
       message: 'Unliked Comment :(',
       duration: 1500,
@@ -92,7 +105,7 @@ export class RepliesComponent implements OnChanges {
     reply.liked = false;
     await this.commentService.unlikeReply(this.postId, this.commentId, reply.id, uid);
     console.log('unliked');
-    await this.user.update(uid, 'likedReplyIds', user.likedReplyIds.filter(id => id !== reply.id));
+    await this.userService.update(uid, 'likedReplyIds', this.user.likedReplyIds.filter(id => id !== reply.id));
     console.log('updated user likedReplyIds');
   }
 

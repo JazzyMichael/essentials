@@ -9,24 +9,23 @@
 
 <div *ngFor="let comment of comments$ | async" style="position: relative;">
   <ion-card
-    style="border-left: 2px solid var(--ion-color-primary)"
+    [ngStyle]="{ 'border-left': comment.userId === user.uid ? '8px solid var(--ion-color-secondary)' : '4px solid var(--ion-color-primary)' }"
     [routerLink]="'/comment-view/' + comment.postId + '/' + comment.id">
 
     <ion-card-header>
       <ion-card-subtitle>{{ comment.username }}, 6 hours ago</ion-card-subtitle>
     </ion-card-header>
+
     <ion-card-content>
       <p>{{ comment.text }}</p>
     </ion-card-content>
+
     <p style="margin: 0 0 0.5em 0.5em; font-size: 0.8em; text-align: center;">View Replies</p>
   </ion-card>
-  <ion-badge *ngIf="!comment.liked" (click)="likeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 2em;">
+
+  <ion-badge (click)="comment.liked ? unlikeComment(comment) : likeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 2em;">
     {{ comment.likes ? comment.likes : '' }}
-    <ion-icon name="thumbs-up-outline"></ion-icon>
-  </ion-badge>
-  <ion-badge *ngIf="comment.liked" (click)="unlikeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 2em;">
-    {{ comment.likes ? comment.likes : '' }}
-    <ion-icon name="thumbs-up"></ion-icon>
+    <ion-icon [name]="comment.liked ? 'thumbs-up' : 'thumbs-up-outline'"></ion-icon>
   </ion-badge>
 </div>
 

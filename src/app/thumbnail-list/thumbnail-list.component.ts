@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class ThumbnailListComponent {
   @Input() posts: any[] = [];
+  @Input() userId: string;
 
   constructor() { }
 

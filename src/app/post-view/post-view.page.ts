@@ -137,6 +137,7 @@ export class PostViewPage implements OnInit {
     const newComment = {
       userId: uid,
       postId,
+      postUserId: this.postUserId,
       username,
       createdAt: new Date(),
       text: this.comment,

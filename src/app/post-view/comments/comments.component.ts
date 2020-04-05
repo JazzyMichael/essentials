@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { CommentService } from 'src/app/services/comment.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
@@ -10,20 +10,32 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss'],
 })
-export class CommentsComponent implements OnChanges {
+export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() postId: string;
   comments$: BehaviorSubject<any[]> = new BehaviorSubject([]);
   commentCount: number;
   lastComment: any;
   sort: string = 'createdAt';
   infScr: any;
+  userSub: Subscription;
+  user: any;
 
   constructor(
     private commentService: CommentService,
     private toast: ToastController,
     private auth: AuthService,
-    private user: UserService
+    private userService: UserService
   ) { }
+
+  ngOnInit() {
+    this.userSub = this.auth.user$.subscribe(user => {
+      this.user = user;
+    });
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
+  }
 
   async ngOnChanges() {
     console.log('change', this.postId);
@@ -61,9 +73,8 @@ export class CommentsComponent implements OnChanges {
   }
 
   async likeComment(comment: any) {
-    const user = this.auth.user$.getValue();
-    if (!user || !user.uid) return;
-    const uid = user.uid;
+    if (!this.user || !this.user.uid) return;
+    const uid = this.user.uid;
     await this.commentService.likeComment(this.postId, comment.id, uid);
     const toasty = await this.toast.create({
       message: 'Liked Comment :)',
@@ -73,14 +84,13 @@ export class CommentsComponent implements OnChanges {
     toasty.present();
     comment.likes++;
     comment.liked = true;
-    await this.user.update(uid, 'likedCommentIds', [ ...user.likedCommentIds.slice(-99), comment.id ]);
+    await this.userService.update(uid, 'likedCommentIds', [ ...this.user.likedCommentIds.slice(-99), comment.id ]);
     console.log('updated user likedCommentIds');
   }
 
   async unlikeComment(comment: any) {
-    const user = this.auth.user$.getValue();
-    if (!user || !user.uid) return;
-    const uid = user.uid;
+    if (!this.user || !this.user.uid) return;
+    const uid = this.user.uid;
     await this.commentService.unlikeComment(this.postId, comment.id, uid);
     const toasty = await this.toast.create({
       message: 'Unliked Comment :(',
@@ -90,7 +100,7 @@ export class CommentsComponent implements OnChanges {
     toasty.present();
     comment.likes--;
     comment.liked = false;
-    await this.user.update(uid, 'likedCommentIds', user.likedCommentIds.filter(id => id !== comment.id));
+    await this.userService.update(uid, 'likedCommentIds', this.user.likedCommentIds.filter(id => id !== comment.id));
     console.log('updated user likedCommentIds');
   }
 

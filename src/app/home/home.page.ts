@@ -1,25 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostService } from '../services/post.service';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss']
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
   hideAnnouncement: boolean;
   posts$: BehaviorSubject<any[]> = new BehaviorSubject([]);
   sort: string = 'createdAt';
   lastPost: any;
   infScr: any;
+  userSub: Subscription;
+  userId: string;
 
-  constructor(private postService: PostService) { }
+  constructor(private postService: PostService, private auth: AuthService) { }
 
   async ngOnInit() {
+    this.userSub = this.auth.user$.subscribe(user => {
+      this.userId = user && user.uid || null;
+    });
     const posts = await this.postService.getFirst(this.sort);
     this.lastPost = posts[posts.length - 1];
     this.posts$.next(posts);
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
   }
 
   async loadMore(event: any) {
