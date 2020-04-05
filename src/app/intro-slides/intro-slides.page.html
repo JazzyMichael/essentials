@@ -1,0 +1,25 @@
+<ion-content fullscreen scroll-y="false">
+  <ion-slides pager="true" style="height: 100%; background: linear-gradient(25deg, #1734e0, #59daf1); color: white;">
+    <ion-slide style="flex-direction: column; justify-content: space-around; padding: 2em;">
+      <h1>Welcome to Essentials Anonymous!</h1>
+      <img src="assets/welcome-cats.svg" alt="Welcome Image" style="width: 90%;">
+      <p>The platform to share thoughts, stories, and experiences as an essential worker- or essential human during the COVID-19 crisis.</p>
+    </ion-slide>
+    <ion-slide style="flex-direction: column; justify-content: space-around; padding: 2em;">
+      <img src="assets/chat.svg" alt="Welcome Image" style="width: 90%;">
+      <h1>Submit posts and engage in the comments</h1>
+    </ion-slide>
+    <ion-slide style="flex-direction: column; justify-content: space-around; padding: 2em;">
+      <img src="assets/customize.svg" alt="Welcome Image" style="width: 90%;">
+      <h1>Dark Mode and theming allows for customization and hours of fun!</h1>
+    </ion-slide>
+    <ion-slide style="flex-direction: column; justify-content: center; padding: 2em;">
+      <img src="assets/reading.svg" alt="Welcome Image" style="width: 90%; margin: 20px auto 0;">
+      <ion-button routerLink="/tabs" (click)="login()" color="light" fill="outline">
+        Continue Anonymously
+        <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </ion-button>
+      <br>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
