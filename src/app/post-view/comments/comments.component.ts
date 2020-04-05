@@ -71,9 +71,10 @@ export class CommentsComponent implements OnChanges {
       position: 'top'
     });
     toasty.present();
-    await this.user.update(uid, 'likedCommentIds', [ ...user.likedCommentIds.slice(-99), comment.id ]);
     comment.likes++;
     comment.liked = true;
+    await this.user.update(uid, 'likedCommentIds', [ ...user.likedCommentIds.slice(-99), comment.id ]);
+    console.log('updated user likedCommentIds');
   }
 
   async unlikeComment(comment: any) {
@@ -89,6 +90,8 @@ export class CommentsComponent implements OnChanges {
     toasty.present();
     comment.likes--;
     comment.liked = false;
+    await this.user.update(uid, 'likedCommentIds', user.likedCommentIds.filter(id => id !== comment.id));
+    console.log('updated user likedCommentIds');
   }
 
 }

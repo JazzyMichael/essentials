@@ -109,7 +109,7 @@ export class CommentViewPage implements OnInit {
     console.log('followed');
     this.postId = postId;
     this.commentId = commentId;
-    await this.notifications.notify(this.commentFollowerIds.slice(0, this.commentFollowerIds.length - 1), {
+    await this.notifications.notify(this.commentFollowerIds, {
       icon: 'pizza',
       title: newReply.text,
       subtitle: 'New reply!',

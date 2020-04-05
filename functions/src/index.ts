@@ -89,7 +89,9 @@ export const unlike = functions.https.onCall(({ doc, userId }) => {
 // Notifications
 export const notify = functions.https.onCall(async ({ followerIds, notification }) => {
     if (!followerIds || !notification) throw new Error('invalid notification');
+    if (!followerIds.length) console.log('no followerIds');
     for (const id of followerIds) {
+        console.log('adding notification for user: ' + id);
         await db.collection(`users/${id}/notifications`).add(notification);
     }
 });

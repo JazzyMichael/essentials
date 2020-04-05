@@ -156,7 +156,7 @@ export class PostViewPage implements OnInit {
     await this.follow.addFollower(`posts/${postId}`, uid, oldId);
     console.log('followed');
     this.postId = postId;
-    await this.notifications.notify(this.postFollowerIds.slice(0, this.postFollowerIds.length - 1), {
+    await this.notifications.notify(this.postFollowerIds, {
       icon: 'ice-cream',
       title: this.postTitle,
       subtitle: 'New comment!',

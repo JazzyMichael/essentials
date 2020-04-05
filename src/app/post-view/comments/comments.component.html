@@ -7,27 +7,28 @@
   <ion-label style="text-align: center;">Be the first to comment on this post!</ion-label>
 </ion-item>
 
-<ion-card
-  *ngFor="let comment of comments$ | async"
-  style="border-left: 2px solid var(--ion-color-primary)"
-  [routerLink]="'/comment-view/' + comment.postId + '/' + comment.id">
+<div *ngFor="let comment of comments$ | async" style="position: relative;">
+  <ion-card
+    style="border-left: 2px solid var(--ion-color-primary)"
+    [routerLink]="'/comment-view/' + comment.postId + '/' + comment.id">
 
-  <ion-card-header>
-    <ion-card-subtitle>{{ comment.username }}, 6 hours ago</ion-card-subtitle>
-  </ion-card-header>
-  <ion-card-content>
-    <p>{{ comment.text }}</p>
-  </ion-card-content>
-
-  <ion-badge *ngIf="!comment.liked" (click)="likeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 1em;">
+    <ion-card-header>
+      <ion-card-subtitle>{{ comment.username }}, 6 hours ago</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ comment.text }}</p>
+    </ion-card-content>
+    <p style="margin: 0 0 0.5em 0.5em; font-size: 0.8em; text-align: center;">View Replies</p>
+  </ion-card>
+  <ion-badge *ngIf="!comment.liked" (click)="likeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 2em;">
     {{ comment.likes ? comment.likes : '' }}
     <ion-icon name="thumbs-up-outline"></ion-icon>
   </ion-badge>
-  <ion-badge *ngIf="comment.liked" (click)="unlikeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 1em;">
+  <ion-badge *ngIf="comment.liked" (click)="unlikeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 2em;">
     {{ comment.likes ? comment.likes : '' }}
     <ion-icon name="thumbs-up"></ion-icon>
   </ion-badge>
-</ion-card>
+</div>
 
 <ion-infinite-scroll threshold="150px" (ionInfinite)="loadMore($event)">
   <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
