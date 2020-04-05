@@ -24,11 +24,18 @@
       <ion-icon *ngIf="comment.liked" name="thumbs-up"></ion-icon>
       <ion-icon *ngIf="!comment.liked" name="thumbs-up-outline"></ion-icon>
     </ion-badge>
+    <p>(Commented from 'Post Title')</p>
     <p [routerLink]="'/user-posts/' + commentUserId">{{ comment.username }}</p>
     <p>{{ comment.createdAt.toDate() | date:'short' }}</p>
     <hr>
     <p>{{ comment.text }}</p>
   </div>
+
+  <ion-button expand="full" (click)="liked ? unlike() : like()">
+    <span slot="start" style="margin-top: 4px">{{ liked ? 'Liked' : 'Like' }}</span>
+    <ion-icon *ngIf="liked" name="thumbs-up" slot="end"></ion-icon>
+    <ion-icon *ngIf="!liked" name="thumbs-up-outline" slot="end"></ion-icon>
+  </ion-button>
 
   <app-replies [postId]="postId" [commentId]="commentId"></app-replies>
 

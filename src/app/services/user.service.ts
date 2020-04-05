@@ -8,7 +8,7 @@ export class UserService {
 
   constructor(private firestore: AngularFirestore) { }
 
-  update(id: string, key: string, val: string) {
+  update(id: string, key: string, val: any) {
     return this.firestore.doc(`users/${id}`).update({ [key]: val });
   }
 }

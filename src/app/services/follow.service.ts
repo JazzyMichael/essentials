@@ -8,9 +8,9 @@ export class FollowService {
 
   constructor(private functions: AngularFireFunctions) { }
 
-  addFollower(doc: string, id: string) {
+  addFollower(doc: string, newId: string, oldId?: string) {
     return this.functions
-      .httpsCallable('addFollower')({ doc, id })
+      .httpsCallable('addFollower')({ doc, newId, oldId })
       .toPromise();
   }
 

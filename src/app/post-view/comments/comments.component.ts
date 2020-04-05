@@ -3,6 +3,7 @@ import { CommentService } from 'src/app/services/comment.service';
 import { BehaviorSubject } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-comments',
@@ -20,10 +21,12 @@ export class CommentsComponent implements OnChanges {
   constructor(
     private commentService: CommentService,
     private toast: ToastController,
-    private auth: AuthService
+    private auth: AuthService,
+    private user: UserService
   ) { }
 
   async ngOnChanges() {
+    console.log('change', this.postId);
     if (!this.postId) return;
     const comments = await this.commentService.getComments(this.postId, this.sort);
     this.lastComment = comments[comments.length - 1];
@@ -34,6 +37,11 @@ export class CommentsComponent implements OnChanges {
   async loadMore(event: any) {
     console.log('loading more');
     this.infScr = event.target;
+    if (!this.postId || !this.sort || !this.lastComment) {
+      event.target.complete();
+      event.target.disabled = true;
+      return;
+    }
     const comments = await this.commentService.getMoreComments(this.postId, this.sort, this.lastComment);
     this.lastComment = comments[comments.length - 1];
     event.target.complete();
@@ -63,6 +71,7 @@ export class CommentsComponent implements OnChanges {
       position: 'top'
     });
     toasty.present();
+    await this.user.update(uid, 'likedCommentIds', [ ...user.likedCommentIds.slice(-99), comment.id ]);
     comment.likes++;
     comment.liked = true;
   }

@@ -9,6 +9,7 @@ import { switchMap, tap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ReportService } from 'src/app/services/report.service';
 import { FollowService } from '../services/follow.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-post-view',
@@ -21,6 +22,8 @@ export class PostViewPage implements OnInit {
   post$: Observable<any>;
   postId: string;
   postUserId: string;
+  postFollowerIds: string[];
+  postTitle: string;
   comment: string;
 
   constructor(
@@ -33,7 +36,8 @@ export class PostViewPage implements OnInit {
     private router: Router,
     private notifications: NotificationService,
     private reportService: ReportService,
-    private follow: FollowService
+    private follow: FollowService,
+    private user: UserService
   ) { }
 
   ngOnInit() {
@@ -45,6 +49,11 @@ export class PostViewPage implements OnInit {
       }),
       tap(post => {
         this.postUserId = post.userId;
+        this.postFollowerIds = post.followerIds && post.followerIds.length ? post.followerIds : [];
+        this.postTitle = post.title || '';
+        const user = this.auth.user$.getValue();
+        this.following = user && user.uid && this.postFollowerIds.includes(user.uid);
+        this.liked = user && user.likedPostIds && user.likedPostIds.includes(this.postId);
       })
     );
   }
@@ -67,23 +76,16 @@ export class PostViewPage implements OnInit {
     });
     toasty.present();
     const uid = user.uid;
+    user.likedPostIds = user.likedPostIds || [];
     this.liked = true;
+    this.following = true;
     await this.postService.likePost(this.postId, uid);
+    await this.user.update(uid, 'likedPostIds', [ ...user.likedPostIds.slice(-99), this.postId ]);
     console.log('liked');
-    await this.follow.addFollower(`posts/${this.postId}`, uid);
+    const oldId = this.postFollowerIds.length > 99 ? this.postFollowerIds[this.postFollowerIds.length - 1] : undefined;
+    await this.follow.addFollower(`posts/${this.postId}`, uid, oldId);
     console.log('followed');
-    const note = {
-      icon: 'sunny',
-      title,
-      subtitle: 'You liked this post!',
-      route: `/post/${this.postId}`,
-      read: false
-    };
-    await this.notifications.addNotification(uid, note);
-    console.log('notified');
-    const temp = { postId: this.postId };
-    this.postId = '';
-    this.postId = temp.postId;
+    this.liked = true;
     this.following = true;
   }
 
@@ -94,72 +96,73 @@ export class PostViewPage implements OnInit {
       position: 'top'
     });
     toasty.present();
-    const { uid } = this.auth.user$.getValue();
+    let { uid, likedPostIds } = this.auth.user$.getValue();
+    likedPostIds = likedPostIds && likedPostIds.length ? likedPostIds : [];
     this.liked = false;
     await this.postService.unlikePost(this.postId, uid);
+    await this.user.update(uid, 'likedPostIds', likedPostIds.filter(id => id !== this.postId));
     console.log('unliked');
-    await this.follow.removeFollower(`posts/${this.postId}`, uid);
-    console.log('unfollowed');
-    const note = {
-      icon: 'thunderstorm',
-      title,
-      subtitle: 'You unliked this post',
-      route: `/post/${this.postId}`,
-      read: false
-    };
-    await this.notifications.addNotification(uid, note);
-    console.log('notified');
-    const temp = { postId: this.postId };
-    this.postId = '';
-    this.postId = temp.postId;
+    this.liked = false;
   }
 
-  async toggleFollowing(follow: boolean) {
+  async toggleFollowing() {
     const { uid } = (this.auth.user$.getValue() || { uid: null });
 
     if (!uid) return;
 
-    if (follow) {
-      await this.follow.addFollower(`posts/${this.postId}`, uid);
+    const toasty = await this.toast.create({
+      message: this.following ? 'Following!' : 'Stopped following :(',
+      duration: 1000,
+      position: 'top'
+    });
+    toasty.present();
+
+    this.following = !this.following;
+
+    if (this.following) {
+      const oldId = this.postFollowerIds.length > 99 ? this.postFollowerIds[this.postFollowerIds.length - 1] : undefined;
+      await this.follow.addFollower(`posts/${this.postId}`, uid, oldId);
       console.log('followed');
     } else {
       await this.follow.removeFollower(`posts/${this.postId}`, uid);
       console.log('unfollowed');
     }
-    const toasty = await this.toast.create({
-      message: follow ? 'Following!' : 'Stopped following :(',
-      duration: 1000,
-      position: 'top'
-    });
-    toasty.present();
   }
 
   async addComment() {
     if (!this.comment) return;
+    const postId = this.postId;
+    this.postId = '';
     const { uid, username } = this.auth.user$.getValue();
     const newComment = {
       userId: uid,
-      postId: this.postId,
+      postId,
       username,
       createdAt: new Date(),
       text: this.comment,
       likes: 0,
-      followerIds: []
+      followerIds: [uid]
     };
     await this.commentService.createComment(newComment);
     console.log('commented');
     this.comment = '';
-    const temp = { postId: this.postId };
-    this.postId = '';
     const toasty = await this.toast.create({
       message: 'Comment added!',
       duration: 1500
     });
     toasty.present();
-    await this.follow.addFollower(`posts/${this.postId}`, uid);
-    console.log('followed');
     this.following = true;
-    this.postId = temp.postId;
+    const oldId = this.postFollowerIds.length > 99 ? this.postFollowerIds[this.postFollowerIds.length - 1] : undefined;
+    await this.follow.addFollower(`posts/${postId}`, uid, oldId);
+    console.log('followed');
+    this.postId = postId;
+    await this.notifications.notify(this.postFollowerIds.slice(0, this.postFollowerIds.length - 1), {
+      icon: 'ice-cream',
+      title: this.postTitle,
+      subtitle: 'New comment!',
+      route: `/post-view/${postId}`
+    });
+    console.log('notified');
   }
 
   async showActions() {

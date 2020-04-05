@@ -73,25 +73,25 @@ export class CommentService {
 
   likeComment(postId: string, commentId: string, userId: string) {
     return this.functions
-      .httpsCallable('likeComment')({ postId, commentId, userId })
+      .httpsCallable('like')({ doc: `posts/${postId}/comments/${commentId}`, userId })
       .toPromise();
   }
 
   unlikeComment(postId: string, commentId: string, userId: string) {
     return this.functions
-      .httpsCallable('unlikeComment')({ postId, commentId, userId })
+      .httpsCallable('unlike')({ doc: `posts/${postId}/comments/${commentId}`, userId })
       .toPromise();
   }
 
   likeReply(postId: string, commentId: string, replyId: string, userId: string) {
     return this.functions
-      .httpsCallable('likeReply')({ postId, commentId, replyId, userId })
+      .httpsCallable('like')({ doc: `posts/${postId}/comments/${commentId}/replies/${replyId}`, userId })
       .toPromise();
   }
 
   unlikeReply(postId: string, commentId: string, replyId: string, userId: string) {
     return this.functions
-      .httpsCallable('unlikeReply')({ postId, commentId, replyId, userId })
+      .httpsCallable('unlike')({ doc: `posts/${postId}/comments/${commentId}/replies/${replyId}`, userId })
       .toPromise();
   }
 

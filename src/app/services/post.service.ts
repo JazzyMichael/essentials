@@ -101,13 +101,13 @@ export class PostService {
 
   likePost(postId: string, userId: string) {
     return this.functions
-      .httpsCallable('likePost')({ postId, userId })
+      .httpsCallable('like')({ doc: `posts/${postId}`, userId })
       .toPromise();
   }
 
   unlikePost(postId: string, userId: string) {
     return this.functions
-      .httpsCallable('unlikePost')({ postId, userId })
+      .httpsCallable('unlike')({ doc: `posts/${postId}`, userId })
       .toPromise();
   }
 }

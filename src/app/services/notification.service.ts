@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireFunctions } from '@angular/fire/functions';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class NotificationService {
   notifications$: BehaviorSubject<any[]> = new BehaviorSubject([]);
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(
+    private firestore: AngularFirestore,
+    private functions: AngularFireFunctions
+  ) { }
 
   markAsRead(userId: string, id: string) {
     return this.firestore
@@ -23,18 +27,18 @@ export class NotificationService {
       .valueChanges({ idField: 'id' });
   }
 
-  async addNotification(userId: string, obj: any) {
+  async notify(followerIds: string[], obj: any) {
     const notification = {
-      icon: obj.icon || 'cloudy-night',
-      title: obj.title || 'Get notified! This is the title of the post',
-      subtitle: obj.subtitle || 'blah asdt This is a sbutitle that should get trounkeabled and is the default',
       route: obj.route || '',
+      icon: obj.icon || 'cloudy-night',
+      title: obj.title || 'New!',
+      subtitle: obj.subtitle || '',
       read: false,
       createdAt: new Date()
     };
 
-    await this.firestore
-      .collection(`users/${userId}/notifications`)
-      .add(notification);
+    console.log('notify - ', { followerIds, notification });
+
+    await this.functions.httpsCallable('notify')({ followerIds, notification }).toPromise();
   }
 }

@@ -57,57 +57,39 @@ export const deletePost = functions.firestore
 export const addFollower = functions.https.onCall(async ({ doc, newId, oldId }) => {
     if (!doc || !newId) throw new Error('invalid follow');
     if (oldId) {
-        const arrayRemove = admin.firestore.FieldValue.arrayRemove([oldId]);
+        const arrayRemove = admin.firestore.FieldValue.arrayRemove(oldId);
         await db.doc(doc).update({ followerIds: arrayRemove });
     }
-    const arrayUnion = admin.firestore.FieldValue.arrayUnion([newId]);
+    const arrayUnion = admin.firestore.FieldValue.arrayUnion(newId);
     await db.doc(doc).update({ followerIds: arrayUnion });
 });
 
 export const removeFollower = functions.https.onCall(({ doc, id }) => {
     if (!doc || !id) throw new Error('invalid follow');
-    const arrayRemove = admin.firestore.FieldValue.arrayRemove([id]);
+    const arrayRemove = admin.firestore.FieldValue.arrayRemove(id);
     return db.doc(doc).update({ followerIds: arrayRemove });
 });
 
 
-// Posts - like & unlike
-export const likePost = functions.https.onCall(({ postId, userId }) => {
-    if (!postId || !userId) throw new Error('invalid post like');
+// Like & Unlike posts, comments, & replies
+export const like = functions.https.onCall(({ doc, userId }) => {
+    if (!doc || !userId) throw new Error('invalid like');
     const increment = admin.firestore.FieldValue.increment(1);
-    return db.doc(`posts/${postId}`).update({ likes: increment });
+    return db.doc(doc).update({ likes: increment });
 });
 
-export const unlikePost = functions.https.onCall(({ postId, userId }) => {
-    if (!postId || !userId) throw new Error('invalid post unlike');
+export const unlike = functions.https.onCall(({ doc, userId }) => {
+    if (!doc || !userId) throw new Error('invalid unlike');
     const decrement = admin.firestore.FieldValue.increment(-1);
-    return db.doc(`posts/${postId}`).update({ likes: decrement });
+    return db.doc(doc).update({ likes: decrement });
 });
 
 
-// Comments - like & unlike
-export const likeComment = functions.https.onCall(({ postId, commentId, userId }) => {
-    if (!postId || !commentId || !userId) throw new Error('invalid comment like');
-    const increment = admin.firestore.FieldValue.increment(1);
-    return db.doc(`posts/${postId}/comments/${commentId}`).update({ likes: increment });
-});
 
-export const unlikeComment = functions.https.onCall(({ postId, commentId, userId }) => {
-    if (!postId || !commentId || !userId) throw new Error('invalid comment unlike');
-    const decrement = admin.firestore.FieldValue.increment(-1);
-    return db.doc(`posts/${postId}/comments/${commentId}`).update({ likes: decrement });
-});
-
-
-// Replies - like & unlike
-export const likeReply = functions.https.onCall(({ postId, commentId, replyId, userId }) => {
-    if (!postId || !commentId || !replyId || !userId) throw new Error('invalid reply like');
-    const increment = admin.firestore.FieldValue.increment(1);
-    return db.doc(`posts/${postId}/comments/${commentId}/replies/${replyId}`).update({ likes: increment });
-});
-
-export const unlikeReply = functions.https.onCall(({ postId, commentId, replyId, userId }) => {
-    if (!postId || !commentId || !replyId || !userId) throw new Error('invalid reply unlike');
-    const decrement = admin.firestore.FieldValue.increment(-1);
-    return db.doc(`posts/${postId}/comments/${commentId}/replies/${replyId}`).update({ likes: decrement });
+// Notifications
+export const notify = functions.https.onCall(async ({ followerIds, notification }) => {
+    if (!followerIds || !notification) throw new Error('invalid notification');
+    for (const id of followerIds) {
+        await db.collection(`users/${id}/notifications`).add(notification);
+    }
 });
