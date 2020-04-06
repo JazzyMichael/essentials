@@ -1,5 +1,11 @@
 <ion-item lines="full">
-  <ion-label>Comments</ion-label>
+  <ion-label>
+    <h2>Comments</h2>
+    <p style="display: flex; align-items: center;" (click)="changeSort()">
+      <ion-icon name="options" style="margin-right: 0.5em;"></ion-icon>
+      {{ sort === 'createdAt' ? 'Recent' : 'Popular' }}
+    </p>
+  </ion-label>
   <ion-badge *ngIf="commentCount" slot="end">{{ commentCount }}+</ion-badge>
 </ion-item>
 

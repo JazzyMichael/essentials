@@ -63,8 +63,8 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
     this.comments$.next([ ...old, ...comments ]);
   }
 
-  async changeSort(event: any) {
-    this.sort = event.target.value;
+  async changeSort() {
+    this.sort = this.sort === 'createdAt' ? 'likes' : 'createdAt';
     if (this.infScr) this.infScr.disabled = false;
     const comments = await this.commentService.getComments(this.postId, this.sort);
     this.lastComment = comments[comments.length - 1];

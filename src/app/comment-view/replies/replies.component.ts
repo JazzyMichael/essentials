@@ -67,8 +67,8 @@ export class RepliesComponent implements OnInit, OnDestroy, OnChanges {
     this.replies$.next([ ...old, ...comments ]);
   }
 
-  async changeSort(event: any) {
-    this.sort = event.target.value;
+  async changeSort() {
+    this.sort = this.sort === 'createdAt' ? 'likes' : 'createdAt';
     if (this.infScr) this.infScr.disabled = false;
     const comments = await this.commentService.getReplies(this.postId, this.commentId, this.sort);
     this.lastReply = comments[comments.length - 1];

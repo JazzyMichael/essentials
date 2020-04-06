@@ -18,24 +18,25 @@
 
 <ion-content *ngIf="comment$ | async as comment">
 
-  <div style="margin: 0 1em 2em;">
-    <ion-badge *ngIf="comment.likes" style="position: absolute; top: 1em; right: 1em;">
-      {{ comment.likes }}
-      <ion-icon *ngIf="comment.liked" name="thumbs-up"></ion-icon>
-      <ion-icon *ngIf="!comment.liked" name="thumbs-up-outline"></ion-icon>
-    </ion-badge>
-    <p>(Commented from 'Post Title')</p>
-    <p [routerLink]="'/user-posts/' + commentUserId">{{ comment.username }}</p>
-    <p>{{ comment.createdAt.toDate() | date:'short' }}</p>
-    <hr>
-    <p>{{ comment.text }}</p>
-  </div>
-
-  <ion-button expand="full" (click)="liked ? unlike() : like()">
-    <span slot="start" style="margin-top: 4px">{{ liked ? 'Liked' : 'Like' }}</span>
-    <ion-icon *ngIf="liked" name="thumbs-up" slot="end"></ion-icon>
-    <ion-icon *ngIf="!liked" name="thumbs-up-outline" slot="end"></ion-icon>
-  </ion-button>
+  <ion-card style="border-left: 4px solid var(--ion-color-primary);">
+    <ion-card-content>
+      <ion-badge *ngIf="comment.likes" style="position: absolute; top: 1em; right: 1em;">
+        {{ comment.likes }}
+        <ion-icon *ngIf="comment.liked" name="thumbs-up"></ion-icon>
+        <ion-icon *ngIf="!comment.liked" name="thumbs-up-outline"></ion-icon>
+      </ion-badge>
+      <p>(Commented from 'Post Title')</p>
+      <p [routerLink]="'/user-posts/' + commentUserId">{{ comment.username }}</p>
+      <p>{{ comment.createdAt.toDate() | date:'short' }}</p>
+      <hr>
+      <p>{{ comment.text }}</p>
+    </ion-card-content>
+    <ion-button expand="full" (click)="liked ? unlike() : like()" style="margin: 0;" color="secondary">
+      <span slot="start" style="margin-top: 4px">{{ liked ? 'Liked' : 'Like' }}</span>
+      <ion-icon *ngIf="liked" name="thumbs-up" slot="end"></ion-icon>
+      <ion-icon *ngIf="!liked" name="thumbs-up-outline" slot="end"></ion-icon>
+    </ion-button>
+  </ion-card>
 
   <app-replies [postId]="postId" [commentId]="commentId" [postUserId]="postUserId" [commentUserId]="commentUserId"></app-replies>
 
