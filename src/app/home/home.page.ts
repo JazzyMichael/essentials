@@ -56,4 +56,8 @@ export class HomePage implements OnInit, OnDestroy {
     this.lastPost = posts[posts.length - 1];
     this.posts$.next(posts);
   }
+
+  adClick() {
+    window.open('http://caronabalona.com/');
+  }
 }

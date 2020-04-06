@@ -76,7 +76,9 @@ export class UserPage implements OnInit {
       });
       toasty.present();
     }
-
   }
 
+  adClick() {
+    window.open('http://caronabalona.com/');
+  }
 }
