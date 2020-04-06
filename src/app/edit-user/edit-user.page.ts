@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Component({
   selector: 'app-edit-user',
@@ -14,15 +15,12 @@ export class EditUserPage implements OnInit {
   constructor(
     private toast: ToastController,
     private userService: UserService,
-    private auth: AuthService
+    private auth: AuthService,
+    private analytics: AngularFireAnalytics
   ) { }
 
   ngOnInit() {
     this.user$ = this.auth.user$.asObservable();
-  }
-
-  async logout() {
-    await this.auth.logout();
   }
 
   async update(key: string, val: string = '') {
@@ -38,6 +36,8 @@ export class EditUserPage implements OnInit {
     });
 
     toasty.present();
+
+    this.analytics.logEvent('update-user', { field: key });
   }
 
 }

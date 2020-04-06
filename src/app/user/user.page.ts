@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { PopoverController, ToastController } from '@ionic/angular';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 import { ColorPopoverComponent } from './color-popover/color-popover.component';
 import { Plugins } from '@capacitor/core';
 
@@ -19,7 +20,8 @@ export class UserPage implements OnInit {
     public auth: AuthService,
     private router: Router,
     private popover: PopoverController,
-    private toast: ToastController
+    private toast: ToastController,
+    private analytics: AngularFireAnalytics
   ) { }
 
   async ngOnInit() {
@@ -28,17 +30,20 @@ export class UserPage implements OnInit {
   }
 
   async darkToggle() {
-    const enabled = document.body.classList.toggle('dark');
-    if (enabled) {
+    const enable = document.body.classList.toggle('dark');
+    if (enable) {
       await Storage.set({ key: 'darkMode', value: 'enabled' });
+      this.analytics.logEvent('dark-mode', { enabled: true });
     } else {
       await Storage.remove({ key: 'darkMode' });
+      this.analytics.logEvent('dark-mode', { enabled: false });
     }
   }
 
   async logout() {
     await Storage.clear();
     await this.auth.logout();
+    this.analytics.logEvent('logout');
   }
 
   editInfo() {
@@ -76,9 +81,11 @@ export class UserPage implements OnInit {
       });
       toasty.present();
     }
+    this.analytics.logEvent('share');
   }
 
   adClick() {
+    this.analytics.logEvent('ad-click');
     window.open('http://caronabalona.com/');
   }
 }

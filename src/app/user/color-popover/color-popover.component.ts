@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 const { Storage } = Plugins;
 
@@ -20,9 +21,9 @@ export class ColorPopoverComponent {
     { name: 'Raisin', icon: 'egg', hex: '#60349F', rgb: '96,52,159', shade: '#542e8c', tint: '#7048a9' }
   ];
 
-  constructor(private popover: PopoverController) { }
+  constructor(private popover: PopoverController, private analytics: AngularFireAnalytics) { }
 
-  async select({ hex, rgb, shade, tint }) {
+  async select({ hex, rgb, shade, tint, name }) {
     document.documentElement.style.setProperty('--ion-color-primary', hex);
     document.documentElement.style.setProperty('--ion-color-primary-rgb', rgb);
     document.documentElement.style.setProperty('--ion-color-primary-shade', shade);
@@ -32,6 +33,8 @@ export class ColorPopoverComponent {
       key: 'primaryColor',
       value: JSON.stringify({ hex, rgb, shade, tint })
     });
+
+    this.analytics.logEvent('change-color', { color: name });
 
     await this.popover.dismiss();
   }

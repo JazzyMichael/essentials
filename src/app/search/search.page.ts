@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { PostService } from '../services/post.service';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Component({
   selector: 'app-search',
@@ -13,7 +14,11 @@ export class SearchPage implements OnInit {
   searchResults$: Observable<any[]>;
   term: string;
 
-  constructor(private toast: ToastController, private postService: PostService) {}
+  constructor(
+    private toast: ToastController,
+    private analytics: AngularFireAnalytics,
+    private postService: PostService
+  ) {}
 
   ngOnInit() {
     this.recentSearches = [];
@@ -24,12 +29,14 @@ export class SearchPage implements OnInit {
     this.searchResults$ = this.postService.getPostsBySearchTerm(this.term);
     if (this.term) {
       this.recentSearches.unshift(term);
+      this.analytics.logEvent('search', { term });
     }
   }
 
   searchRecentTerm(term: string) {
-    this.term = term.toLowerCase();
+    this.term = term.toLowerCase().trim();
     this.searchResults$ = this.postService.getPostsBySearchTerm(this.term);
+    this.analytics.logEvent('search', { term });
   }
 
   clearSearch() {

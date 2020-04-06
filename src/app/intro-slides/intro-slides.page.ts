@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Component({
   selector: 'app-intro-slides',
@@ -11,7 +12,11 @@ import { Subscription } from 'rxjs';
 export class IntroSlidesPage implements OnInit, OnDestroy {
   userSub: Subscription;
 
-  constructor(public auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private analytics: AngularFireAnalytics
+  ) {}
 
   ngOnInit() {
     this.userSub = this.auth.user$.subscribe(user => {
@@ -25,6 +30,7 @@ export class IntroSlidesPage implements OnInit, OnDestroy {
 
   async login() {
     await this.auth.login();
+    this.analytics.logEvent('login');
   }
 
 }
