@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 @Component({
   selector: 'app-color-popover',
@@ -25,7 +28,10 @@ export class ColorPopoverComponent {
     document.documentElement.style.setProperty('--ion-color-primary-shade', shade);
     document.documentElement.style.setProperty('--ion-color-primary-tint', tint);
 
-    localStorage.setItem('primary-color', JSON.stringify({ hex, rgb, shade, tint }));
+    await Storage.set({
+      key: 'primaryColor',
+      value: JSON.stringify({ hex, rgb, shade, tint })
+    });
 
     await this.popover.dismiss();
   }

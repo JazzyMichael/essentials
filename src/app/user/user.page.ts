@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { PopoverController } from '@ionic/angular';
 import { ColorPopoverComponent } from './color-popover/color-popover.component';
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 @Component({
   selector: 'app-user',
@@ -13,22 +16,28 @@ export class UserPage implements OnInit {
   darkMode: boolean;
 
   constructor(
-    private router: Router,
     public auth: AuthService,
+    private router: Router,
     private popover: PopoverController
   ) { }
 
-  ngOnInit() {
-    this.darkMode = !!localStorage.getItem('darkMode');
+  async ngOnInit() {
+    const { value } = await Storage.get({ key: 'darkMode' });
+    this.darkMode = !!value;
   }
 
-  darkToggle() {
+  async darkToggle() {
     const enabled = document.body.classList.toggle('dark');
     if (enabled) {
-      localStorage.setItem('darkMode', 'enabled');
+      await Storage.set({ key: 'darkMode', value: 'enabled' });
     } else {
-      localStorage.removeItem('darkMode');
+      await Storage.remove({ key: 'darkMode' });
     }
+  }
+
+  async logout() {
+    await Storage.clear();
+    await this.auth.logout();
   }
 
   editInfo() {

@@ -31,7 +31,7 @@
   </div>
 
   <div style="display: flex; justify-content: space-around;">
-    <ion-button expand="full" style="flex-grow: 1;" (click)="liked ? unlike(post.title) : like(post.title)">
+    <ion-button expand="full" style="flex-grow: 1;" (click)="liked ? unlike() : like()">
       <span slot="start" style="margin-top: 4px">{{ liked ? 'Liked' : 'Like' }}</span>
       <ion-icon *ngIf="liked" name="thumbs-up" slot="end"></ion-icon>
       <ion-icon *ngIf="!liked" name="thumbs-up-outline" slot="end"></ion-icon>

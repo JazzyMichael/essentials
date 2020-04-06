@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">EssentialsAnonymous</string>
+    <string name="title_activity_main">EssentialsAnonymous</string>
+    <string name="package_name">com.essentialsanonymous</string>
+    <string name="custom_url_scheme">com.essentialsanonymous</string>
+</resources>

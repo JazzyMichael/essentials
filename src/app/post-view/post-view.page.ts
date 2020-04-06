@@ -48,6 +48,7 @@ export class PostViewPage implements OnInit {
         return this.postService.getPostById(this.postId);
       }),
       tap(post => {
+        console.log({ post });
         this.postUserId = post.userId;
         this.postFollowerIds = post.followerIds && post.followerIds.length ? post.followerIds : [];
         this.postTitle = post.title || '';
@@ -58,7 +59,7 @@ export class PostViewPage implements OnInit {
     );
   }
 
-  async like(title: string) {
+  async like() {
     const user = this.auth.user$.getValue();
     if (!user) {
       const toa = await this.toast.create({
@@ -89,7 +90,7 @@ export class PostViewPage implements OnInit {
     this.following = true;
   }
 
-  async unlike(title: string) {
+  async unlike() {
     const toasty = await this.toast.create({
       message: 'Unliked :(',
       duration: 1500,

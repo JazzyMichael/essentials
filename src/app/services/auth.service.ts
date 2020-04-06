@@ -22,7 +22,7 @@ export class AuthService {
       })
     )
     .subscribe(user => {
-      console.log(user);
+      console.log({ user });
       this.user$.next(user);
     });
   }

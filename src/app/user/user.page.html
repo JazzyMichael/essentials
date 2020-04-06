@@ -62,7 +62,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-button *ngIf="auth.user$ | async" (click)="auth.logout()" expand="block" style="margin: 2em auto">
+  <ion-button *ngIf="auth.user$ | async" (click)="logout()" expand="block" style="margin: 2em auto">
     Logout (forever)
   </ion-button>
 

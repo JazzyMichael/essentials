@@ -38,7 +38,6 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async ngOnChanges() {
-    console.log('change', this.postId);
     if (!this.postId) return;
     const comments = await this.commentService.getComments(this.postId, this.sort);
     this.lastComment = comments[comments.length - 1];
@@ -85,7 +84,7 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
     comment.likes++;
     comment.liked = true;
     await this.userService.update(uid, 'likedCommentIds', [ ...this.user.likedCommentIds.slice(-99), comment.id ]);
-    console.log('updated user likedCommentIds');
+    console.log('updated comment likes and user likedCommentIds');
   }
 
   async unlikeComment(comment: any) {
@@ -101,7 +100,7 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
     comment.likes--;
     comment.liked = false;
     await this.userService.update(uid, 'likedCommentIds', this.user.likedCommentIds.filter(id => id !== comment.id));
-    console.log('updated user likedCommentIds');
+    console.log('updated comment likes and user likedCommentIds');
   }
 
 }
