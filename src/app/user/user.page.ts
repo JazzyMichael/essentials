@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ToastController } from '@ionic/angular';
 import { ColorPopoverComponent } from './color-popover/color-popover.component';
 import { Plugins } from '@capacitor/core';
 
-const { Storage } = Plugins;
+const { Storage, Share, Clipboard } = Plugins;
 
 @Component({
   selector: 'app-user',
@@ -18,7 +18,8 @@ export class UserPage implements OnInit {
   constructor(
     public auth: AuthService,
     private router: Router,
-    private popover: PopoverController
+    private popover: PopoverController,
+    private toast: ToastController
   ) { }
 
   async ngOnInit() {
@@ -54,6 +55,28 @@ export class UserPage implements OnInit {
       event
     });
     await pop.present();
+  }
+
+  async share() {
+    try {
+      await Share.share({
+        title: 'Essentials Anonymous',
+        text: 'Real stories from real essentials',
+        url: 'http://essentialsanonymous.com/',
+        dialogTitle: 'Share with buddies'
+      });
+    } catch (e) {
+      await Clipboard.write({
+        string: 'http://essentialsanonymous.com/'
+      });
+      const toasty = await this.toast.create({
+        message: 'Link Copied :)',
+        duration: 1234,
+        position: 'top'
+      });
+      toasty.present();
+    }
+
   }
 
 }

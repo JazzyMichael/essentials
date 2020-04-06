@@ -10,6 +10,9 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { ReportService } from 'src/app/services/report.service';
 import { FollowService } from '../services/follow.service';
 import { UserService } from '../services/user.service';
+import { Plugins } from '@capacitor/core';
+
+const { Share, Clipboard } = Plugins;
 
 @Component({
   selector: 'app-post-view',
@@ -173,7 +176,7 @@ export class PostViewPage implements OnInit {
       role: '',
       icon: 'share-outline',
       handler: () => {
-        this.sharePost().then(() => {
+        this.share().then(() => {
           console.log('shared');
         });
       }
@@ -187,7 +190,7 @@ export class PostViewPage implements OnInit {
         role: 'destructive',
         icon: 'trash-bin',
         handler: () => {
-          this.deletePost().then(() => {
+          this.delete().then(() => {
             console.log('deleted');
           });
         }
@@ -198,7 +201,7 @@ export class PostViewPage implements OnInit {
         role: 'destructive',
         icon: 'megaphone-outline',
         handler: () => {
-          this.reportPost().then(() => {
+          this.report().then(() => {
             console.log('reported');
           });
         }
@@ -211,11 +214,29 @@ export class PostViewPage implements OnInit {
     await actions.present();
   }
 
-  async sharePost() {
-    return;
+  async share() {
+    try {
+      await Share.share({
+        title: 'Essentials Anonymous',
+        text: this.postTitle || 'Real stories from real essentials',
+        url: `http://essentialsanonymous.com/post-view/${this.postId}`,
+        dialogTitle: 'Share with buddies'
+      });
+    } catch (e) {
+      await Clipboard.write({
+        string: `http://essentialsanonymous.com/post-view/${this.postId}`
+      });
+      const toasty = await this.toast.create({
+        message: 'Link Copied :)',
+        duration: 1234,
+        position: 'top'
+      });
+      toasty.present();
+    }
+
   }
 
-  async reportPost() {
+  async report() {
     const user = this.auth.user$.getValue();
     const report = {
       type: 'post',
@@ -231,7 +252,7 @@ export class PostViewPage implements OnInit {
     toasty.present();
   }
 
-  async deletePost() {
+  async delete() {
     await this.postService.deletePost(this.postId);
     this.router.navigateByUrl('/user');
     const toasty = await this.toast.create({
