@@ -2,7 +2,6 @@
 
   <ion-card *ngIf="auth.user$ | async as user; else noUser">
     <ion-card-header color="primary">
-      <ion-icon (click)="showColorPopover()" name="color-palette-outline" style="position: absolute; z-index: 20; top: 10px; right: 10px; font-size: 32px;"></ion-icon>
       <ion-card-subtitle>{{ user.job }} {{ user.company }} {{ !user.job && !user.company ? 'No Job Info' : '' }} </ion-card-subtitle>
       <ion-card-title>{{ user.username }}</ion-card-title>
       <span style="position: absolute; bottom: 10px; right: 10px;">{{ user.posts }} {{ user.posts == 0 || user.posts > 1 ? 'posts' : 'post' }}</span>
@@ -12,6 +11,10 @@
       <ion-item lines="none">
         <ion-toggle [(ngModel)]="darkMode" (ngModelChange)="darkToggle()" slot="start"></ion-toggle>
         <ion-label>Dark Mode</ion-label>
+      </ion-item>
+      <ion-item lines="none" (click)="showColorPopover()">
+        <ion-icon name="color-palette-outline" slot="start" color="primary" style="margin: 0 0.7em;"></ion-icon>
+        <ion-label>Color</ion-label>
       </ion-item>
       <ion-item lines="none" (click)="editInfo()">
         <ion-label>Edit Info</ion-label>
@@ -60,8 +63,8 @@
     </ion-item>
   </ion-list>
 
-  <ion-button *ngIf="auth.user$ | async" (click)="logout()" expand="block" style="margin: 2em auto">
+  <!-- <ion-button *ngIf="auth.user$ | async" (click)="logout()" expand="block" style="margin: 2em auto">
     Logout (forever)
-  </ion-button>
+  </ion-button> -->
 
 </ion-content>
