@@ -1,1 +1,17 @@
+.top-tab-bar {
+    display: none;
+}
 
+.bottom-tab-bar {
+    display: flex;
+}
+
+@media (min-width: 777px) {
+    .top-tab-bar {
+        display: flex;
+    }
+
+    .bottom-tab-bar {
+        display: none;
+    }
+}
