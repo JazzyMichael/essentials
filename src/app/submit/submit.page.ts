@@ -4,6 +4,7 @@ import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { PostService } from '../services/post.service';
 import { AuthService } from '../services/auth.service';
+import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Component({
   selector: 'app-submit',
@@ -18,7 +19,8 @@ export class SubmitPage implements OnInit {
     private toast: ToastController,
     private router: Router,
     private postService: PostService,
-    public auth: AuthService
+    public auth: AuthService,
+    private analytics: AngularFireAnalytics
   ) { }
 
   ngOnInit() {
@@ -48,6 +50,7 @@ export class SubmitPage implements OnInit {
       lowerCaseCompany: (this.postForm.value.company || '').toLowerCase().trim(),
       createdAt: new Date(),
       userId: user.uid,
+      userCompany: user.company,
       username: user.username,
       likes: 0,
       followerIds: [user.uid]
@@ -65,6 +68,8 @@ export class SubmitPage implements OnInit {
     });
 
     toasty.present();
+
+    this.analytics.logEvent('new-post');
   }
 
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
 
@@ -14,7 +13,6 @@ export class EditUserPage implements OnInit {
 
   constructor(
     private toast: ToastController,
-    private userService: UserService,
     private auth: AuthService,
     private analytics: AngularFireAnalytics
   ) { }
@@ -28,7 +26,7 @@ export class EditUserPage implements OnInit {
 
     const { uid } = this.auth.user$.getValue();
 
-    await this.userService.update(uid, key, prettyVal);
+    await this.auth.updateUser(uid, key, prettyVal);
 
     const toasty = await this.toast.create({
       message: prettyVal ? `${key} changed to ${prettyVal}!` : `${key} was removed!`,

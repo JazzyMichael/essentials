@@ -9,7 +9,6 @@ import { switchMap, tap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ReportService } from 'src/app/services/report.service';
 import { FollowService } from '../services/follow.service';
-import { UserService } from '../services/user.service';
 import { Plugins } from '@capacitor/core';
 
 const { Share, Clipboard } = Plugins;
@@ -39,8 +38,7 @@ export class PostViewPage implements OnInit {
     private router: Router,
     private notifications: NotificationService,
     private reportService: ReportService,
-    private follow: FollowService,
-    private user: UserService
+    private follow: FollowService
   ) { }
 
   ngOnInit() {
@@ -63,6 +61,9 @@ export class PostViewPage implements OnInit {
   }
 
   async like() {
+    // increment post likes
+    // update post followers
+    // update user liked posts
     const user = this.auth.user$.getValue();
     if (!user) {
       const toa = await this.toast.create({
@@ -79,21 +80,21 @@ export class PostViewPage implements OnInit {
       position: 'top'
     });
     toasty.present();
-    const uid = user.uid;
-    user.likedPostIds = user.likedPostIds || [];
     this.liked = true;
     this.following = true;
+    const uid = user.uid;
+    user.likedPostIds = user.likedPostIds || [];
     await this.postService.likePost(this.postId, uid);
-    await this.user.update(uid, 'likedPostIds', [ ...user.likedPostIds.slice(-99), this.postId ]);
-    console.log('liked');
+    await this.auth.updateUser(uid, 'likedPostIds', [ ...user.likedPostIds.slice(-99), this.postId ]);
     const oldId = this.postFollowerIds.length > 99 ? this.postFollowerIds[this.postFollowerIds.length - 1] : undefined;
     await this.follow.addFollower(`posts/${this.postId}`, uid, oldId);
-    console.log('followed');
     this.liked = true;
     this.following = true;
   }
 
   async unlike() {
+    // decrement post likes
+    // update user liked posts
     const toasty = await this.toast.create({
       message: 'Unliked :(',
       duration: 1500,
@@ -104,12 +105,12 @@ export class PostViewPage implements OnInit {
     likedPostIds = likedPostIds && likedPostIds.length ? likedPostIds : [];
     this.liked = false;
     await this.postService.unlikePost(this.postId, uid);
-    await this.user.update(uid, 'likedPostIds', likedPostIds.filter(id => id !== this.postId));
-    console.log('unliked');
+    await this.auth.updateUser(uid, 'likedPostIds', likedPostIds.filter(id => id !== this.postId));
     this.liked = false;
   }
 
   async toggleFollowing() {
+    // update post followers
     const { uid } = (this.auth.user$.getValue() || { uid: null });
 
     if (!uid) return;
@@ -134,6 +135,9 @@ export class PostViewPage implements OnInit {
   }
 
   async addComment() {
+    // create comment
+    // notify post followers
+    // update post followers
     if (!this.comment) return;
     const postId = this.postId;
     this.postId = '';
@@ -148,26 +152,30 @@ export class PostViewPage implements OnInit {
       likes: 0,
       followerIds: [uid]
     };
+
     await this.commentService.createComment(newComment);
-    console.log('commented');
+
     this.comment = '';
+
     const toasty = await this.toast.create({
       message: 'Comment added!',
       duration: 1500
     });
     toasty.present();
+
     this.following = true;
     const oldId = this.postFollowerIds.length > 99 ? this.postFollowerIds[this.postFollowerIds.length - 1] : undefined;
+
     await this.follow.addFollower(`posts/${postId}`, uid, oldId);
-    console.log('followed');
-    this.postId = postId;
+
     await this.notifications.notify(this.postFollowerIds, {
       icon: 'ice-cream',
       title: this.postTitle,
       subtitle: 'New comment!',
       route: `/post-view/${postId}`
     });
-    console.log('notified');
+
+    this.postId = postId;
   }
 
   async showActions() {

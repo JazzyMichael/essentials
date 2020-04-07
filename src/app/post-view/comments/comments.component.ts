@@ -3,7 +3,6 @@ import { CommentService } from 'src/app/services/comment.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-comments',
@@ -23,8 +22,7 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private commentService: CommentService,
     private toast: ToastController,
-    private auth: AuthService,
-    private userService: UserService
+    private auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -83,8 +81,7 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
     toasty.present();
     comment.likes++;
     comment.liked = true;
-    await this.userService.update(uid, 'likedCommentIds', [ ...this.user.likedCommentIds.slice(-99), comment.id ]);
-    console.log('updated comment likes and user likedCommentIds');
+    await this.auth.updateUser(uid, 'likedCommentIds', [ ...this.user.likedCommentIds.slice(-99), comment.id ]);
   }
 
   async unlikeComment(comment: any) {
@@ -99,8 +96,7 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
     toasty.present();
     comment.likes--;
     comment.liked = false;
-    await this.userService.update(uid, 'likedCommentIds', this.user.likedCommentIds.filter(id => id !== comment.id));
-    console.log('updated comment likes and user likedCommentIds');
+    await this.auth.updateUser(uid, 'likedCommentIds', this.user.likedCommentIds.filter(id => id !== comment.id));
   }
 
 }

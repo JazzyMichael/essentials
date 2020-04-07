@@ -27,6 +27,10 @@ export class AuthService {
     });
   }
 
+  updateUser(id: string, key: string, val: any) {
+    return this.firestore.doc(`users/${id}`).update({ [key]: val });
+  }
+
   async login() {
     await this.auth.signInAnonymously();
   }

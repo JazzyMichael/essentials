@@ -23,7 +23,7 @@
       <ion-icon *ngIf="!liked" name="thumbs-up-outline"></ion-icon>
     </ion-badge>
     <h1>{{ post.title }}</h1>
-    <h4>{{ post.type }}, {{ post.company }}</h4>
+    <h4>{{ post.type }}, {{ post.company || post.userCompany }}</h4>
     <p [routerLink]="'/user-posts/' + postUserId">{{ post.username || 'Username' }}</p>
     <p>{{ post.createdAt.toDate() | date:'short' }} {{ post.location || '' }}</p>
     <hr>
