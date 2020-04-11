@@ -48,6 +48,7 @@ export class SubmitPage implements OnInit {
       lowerCaseTitle: this.postForm.value.title.toLowerCase().trim(),
       lowerCaseType: this.postForm.value.type.toLowerCase().trim(),
       lowerCaseCompany: (this.postForm.value.company || '').toLowerCase().trim(),
+      company: this.postForm.value.company || '',
       createdAt: new Date(),
       userId: user.uid,
       userCompany: user.company,
