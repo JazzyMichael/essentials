@@ -51,7 +51,7 @@ export class SubmitPage implements OnInit {
       company: this.postForm.value.company || '',
       createdAt: new Date(),
       userId: user.uid,
-      userCompany: user.company,
+      userCompany: user.company || this.postForm.value.company || '',
       username: user.username,
       likes: 0,
       followerIds: [user.uid]
