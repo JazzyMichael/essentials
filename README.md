@@ -4,11 +4,10 @@
 A hybrid app for posting anonymous snippets about essential business and pandemic related topics.
 
 ### Capacitor Plugins
-- Share
+- Share (and Clipboard as fallback)
 - Storage
-- AdMob (community)
 
-### Potential Future Capacitor Plugins
-- Push Notifications
+### Future
 - Splash Screen
-- Device
+- Ad Network
+- Push Notifications
