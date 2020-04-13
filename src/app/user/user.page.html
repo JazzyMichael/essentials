@@ -1,6 +1,6 @@
 <ion-content>
 
-  <ion-card *ngIf="auth.user$ | async as user; else noUser" class="desktop">
+  <ion-card *ngIf="auth.user$ | async as user; else noUser" class="desktop" style="width: 95%">
     <ion-card-header color="primary">
       <ion-card-subtitle>{{ user.job }} {{ user.company }} {{ !user.job && !user.company ? 'No Job Info' : '' }} </ion-card-subtitle>
       <ion-card-title>{{ user.username }}</ion-card-title>
