@@ -1,6 +1,6 @@
 <ion-content>
 
-  <ion-card *ngIf="auth.user$ | async as user; else noUser">
+  <ion-card *ngIf="auth.user$ | async as user; else noUser" class="desktop">
     <ion-card-header color="primary">
       <ion-card-subtitle>{{ user.job }} {{ user.company }} {{ !user.job && !user.company ? 'No Job Info' : '' }} </ion-card-subtitle>
       <ion-card-title>{{ user.username }}</ion-card-title>
@@ -12,7 +12,7 @@
         <ion-toggle [(ngModel)]="darkMode" (ngModelChange)="darkToggle()" slot="start"></ion-toggle>
         <ion-label>Dark Mode</ion-label>
       </ion-item>
-      <ion-item lines="none" (click)="showColorPopover()">
+      <ion-item lines="none" (click)="showColorPopover()" style="cursor: pointer;">
         <ion-icon name="color-palette-outline" slot="start" color="primary" style="margin: 0 0.7em;"></ion-icon>
         <ion-label>Color</ion-label>
       </ion-item>
@@ -28,7 +28,7 @@
   </ion-card>
 
   <ng-template #noUser>
-    <div style="text-align: center;">
+    <div style="text-align: center;" class="desktop">
       <h4 style="margin: 2em auto;">Login to interact with the community</h4>
 
       <ion-button expand="block" fill="outline" (click)="auth.login()">
@@ -41,17 +41,17 @@
   <img
     src="assets/caronabalona-ad.png"
     alt="Carona Balona"
-    style="display: block; width: 98%; margin: 1em auto;"
+    style="display: block; width: 98%; max-width: 777px; margin: 1em auto;"
     (click)="adClick()">
 
-  <ion-list>
-    <ion-item (click)="share()">
+  <ion-list class="desktop">
+    <ion-item (click)="share()" style="cursor: crosshair;">
       <ion-label>Share</ion-label>
       <ion-icon slot="end" name="share-social-outline"></ion-icon>
     </ion-item>
 
     <ion-item routerLink="/about">
-      <ion-label>About This App</ion-label>
+      <ion-label>More Info</ion-label>
     </ion-item>
 
     <ion-item routerLink="/privacy">

@@ -37,8 +37,8 @@
 
   <br>
 
-  <ng-container *ngIf="searchResults$ | async as posts">
+  <div *ngIf="searchResults$ | async as posts" class="desktop">
     <app-thumbnail-list *ngIf="term" [posts]="posts"></app-thumbnail-list>
-  </ng-container>
+  </div>
 
 </ion-content>

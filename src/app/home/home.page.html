@@ -1,4 +1,4 @@
-<ion-content style="text-align: center;">
+<ion-content>
 
   <div *ngIf="!hideAnnouncement" class="announcement">
     <ion-icon (click)="hideAnnouncement = true" style="display: block; margin: 0 0 0 auto; font-size: 24px;" name="close-outline"></ion-icon>
@@ -10,28 +10,31 @@
     </ion-button>
   </div>
 
-  <img
-    src="assets/caronabalona-ad.png"
-    alt="Carona Balona"
-    style="display: block; width: 98%; margin: 1em auto;"
-    (click)="adClick()">
+  <div class="desktop">
+    <img
+      src="assets/caronabalona-ad.png"
+      alt="Carona Balona"
+      style="display: block; width: 98%; margin: 1em auto;"
+      (click)="adClick()">
 
-  <ion-segment color="primary" value="createdAt" (ionChange)="changeSort($event)">
-    <ion-segment-button value="createdAt">
-      <ion-label>Recent</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="likes">
-      <ion-label>Popular</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="featured">
-      <ion-label>Featured</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+    <ion-segment color="primary" value="createdAt" (ionChange)="changeSort($event)">
+      <ion-segment-button value="createdAt">
+        <ion-label>Recent</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="likes">
+        <ion-label>Popular</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="featured">
+        <ion-label>Featured</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
-  <app-thumbnail-list *ngIf="posts$ | async as posts" [posts]="posts" [userId]="userId"></app-thumbnail-list>
+    <app-thumbnail-list *ngIf="posts$ | async as posts" [posts]="posts" [userId]="userId"></app-thumbnail-list>
 
-  <ion-infinite-scroll threshold="150px" (ionInfinite)="loadMore($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+    <ion-infinite-scroll threshold="150px" (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+
 
 </ion-content>
