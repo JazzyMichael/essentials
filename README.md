@@ -1,3 +1,5 @@
+![Logo](/feature-graphic.png "Feature Graphic")
+
 # Essentials Anonymous
 
 ## Ionic, Angular, Capacitor, Firebase
