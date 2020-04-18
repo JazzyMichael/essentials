@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { UserPostsPageRoutingModule } from './user-posts-routing.module';
 
 import { UserPostsPage } from './user-posts.page';
-import { ThumbnailListModule } from '../thumbnail-list/thumbnail-list.module';
+import { ThumbnailListModule } from 'src/app/thumbnail-list/thumbnail-list.module';
 
 @NgModule({
   imports: [

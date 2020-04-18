@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { ToastController, ActionSheetController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
-import { CommentService } from '../services/comment.service';
-import { ReportService } from '../services/report.service';
-import { FollowService } from '../services/follow.service';
-import { NotificationService } from '../services/notification.service';
+import { CommentService } from '../../services/comment.service';
+import { FollowService } from '../../services/follow.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-comment-view',
@@ -34,7 +33,6 @@ export class CommentViewPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private commentService: CommentService,
-    private reportService: ReportService,
     private follow: FollowService,
     private notifications: NotificationService
   ) { }
@@ -210,7 +208,7 @@ export class CommentViewPage implements OnInit {
       commentUserId: this.commentUserId,
       userId: user ? user.uid : ''
     };
-    await this.reportService.add(report);
+    await this.commentService.report(report);
     const toasty = await this.toast.create({
       message: 'Comment has been reported.',
       duration: 1234

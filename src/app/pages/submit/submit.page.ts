@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { PostService } from '../services/post.service';
-import { AuthService } from '../services/auth.service';
+import { PostService } from 'src/app/services/post.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Component({

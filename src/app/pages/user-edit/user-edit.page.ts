@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Component({
-  selector: 'app-edit-user',
-  templateUrl: './edit-user.page.html',
-  styleUrls: ['./edit-user.page.scss'],
+  selector: 'app-user-edit',
+  templateUrl: './user-edit.page.html',
+  styleUrls: ['./user-edit.page.scss'],
 })
-export class EditUserPage implements OnInit {
+export class UserEditPage implements OnInit {
   user$: any;
 
   constructor(

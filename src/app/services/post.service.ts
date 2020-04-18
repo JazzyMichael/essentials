@@ -109,4 +109,8 @@ export class PostService {
       .httpsCallable('unlike')({ doc: `posts/${postId}`, userId })
       .toPromise();
   }
+
+  report(obj: any) {
+    return this.firestore.collection('reports').add(obj);
+  }
 }

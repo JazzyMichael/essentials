@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { PopoverController, ToastController } from '@ionic/angular';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
 import { ColorPopoverComponent } from './color-popover/color-popover.component';
@@ -47,7 +47,7 @@ export class UserPage implements OnInit {
   }
 
   editInfo() {
-    this.router.navigateByUrl('/edit-user');
+    this.router.navigateByUrl('/user-edit');
   }
 
   viewPosts(id: string) {

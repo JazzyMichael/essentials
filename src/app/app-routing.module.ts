@@ -12,31 +12,31 @@ const routes: Routes = [
   },
   {
     path: 'post-view',
-    loadChildren: () => import('./post-view/post-view.module').then( m => m.PostViewPageModule)
-  },
-  {
-    path: 'about',
-    loadChildren: () => import('./about/about.module').then( m => m.AboutPageModule)
-  },
-  {
-    path: 'privacy',
-    loadChildren: () => import('./privacy/privacy.module').then( m => m.PrivacyPageModule)
-  },
-  {
-    path: 'terms',
-    loadChildren: () => import('./terms/terms.module').then( m => m.TermsPageModule)
-  },
-  {
-    path: 'user-posts',
-    loadChildren: () => import('./user-posts/user-posts.module').then( m => m.UserPostsPageModule)
-  },
-  {
-    path: 'edit-user',
-    loadChildren: () => import('./edit-user/edit-user.module').then( m => m.EditUserPageModule)
+    loadChildren: () => import('./pages/post-view/post-view.module').then( m => m.PostViewPageModule)
   },
   {
     path: 'comment-view',
-    loadChildren: () => import('./comment-view/comment-view.module').then( m => m.CommentViewPageModule)
+    loadChildren: () => import('./pages/comment-view/comment-view.module').then( m => m.CommentViewPageModule)
+  },
+  {
+    path: 'about',
+    loadChildren: () => import('./pages/about/about.module').then( m => m.AboutPageModule)
+  },
+  {
+    path: 'privacy',
+    loadChildren: () => import('./pages/privacy/privacy.module').then( m => m.PrivacyPageModule)
+  },
+  {
+    path: 'terms',
+    loadChildren: () => import('./pages/terms/terms.module').then( m => m.TermsPageModule)
+  },
+  {
+    path: 'user-posts',
+    loadChildren: () => import('./pages/user-posts/user-posts.module').then( m => m.UserPostsPageModule)
+  },
+  {
+    path: 'user-edit',
+    loadChildren: () => import('./pages/user-edit/user-edit.module').then( m => m.UserEditPageModule)
   }
 ];
 @NgModule({

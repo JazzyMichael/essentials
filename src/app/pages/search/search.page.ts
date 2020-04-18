@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { PostService } from '../services/post.service';
+import { PostService } from 'src/app/services/post.service';
 import { AngularFireAnalytics } from '@angular/fire/analytics';
 
 @Component({

@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ToastController, ActionSheetController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { PostService } from '../services/post.service';
-import { CommentService } from '../services/comment.service';
-import { AuthService } from '../services/auth.service';
+import { PostService } from '../../services/post.service';
+import { CommentService } from '../../services/comment.service';
+import { AuthService } from '../../services/auth.service';
 import { switchMap, tap } from 'rxjs/operators';
 import { NotificationService } from 'src/app/services/notification.service';
-import { ReportService } from 'src/app/services/report.service';
-import { FollowService } from '../services/follow.service';
+import { FollowService } from '../../services/follow.service';
 import { Plugins } from '@capacitor/core';
 
 const { Share, Clipboard } = Plugins;
@@ -38,7 +37,6 @@ export class PostViewPage implements OnInit {
     public auth: AuthService,
     private router: Router,
     private notifications: NotificationService,
-    private reportService: ReportService,
     private follow: FollowService
   ) { }
 
@@ -230,7 +228,7 @@ export class PostViewPage implements OnInit {
       postUserId: this.postUserId,
       userId: user ? user.uid : ''
     };
-    await this.reportService.add(report);
+    await this.postService.report(report);
     const toasty = await this.toast.create({
       message: 'Post has been reported.',
       duration: 1234

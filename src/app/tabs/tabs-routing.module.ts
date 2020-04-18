@@ -12,7 +12,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
+            loadChildren: () => import('../pages/home/home.module').then(m => m.HomePageModule)
           }
         ]
       },
@@ -22,7 +22,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../search/search.module').then(m => m.SearchPageModule)
+              import('../pages/search/search.module').then(m => m.SearchPageModule)
           }
         ]
       },
@@ -31,7 +31,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('../notifications/notifications.module').then(m => m.NotificationsPageModule)
+            loadChildren: () => import('../pages/notifications/notifications.module').then(m => m.NotificationsPageModule)
           }
         ]
       },
@@ -40,7 +40,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('../user/user.module').then( m => m.UserPageModule)
+            loadChildren: () => import('../pages/user/user.module').then( m => m.UserPageModule)
           }
         ]
       },
@@ -49,7 +49,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('../submit/submit.module').then( m => m.SubmitPageModule)
+            loadChildren: () => import('../pages/submit/submit.module').then( m => m.SubmitPageModule)
           }
         ]
       },

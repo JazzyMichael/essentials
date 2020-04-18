@@ -108,4 +108,10 @@ export class CommentService {
       .doc(`posts/${postId}/comments/${commentId}/replies/${replyId}`)
       .delete();
   }
+
+  // R-eport
+
+  report(obj: any) {
+    return this.firestore.collection('reports').add(obj);
+  }
 }

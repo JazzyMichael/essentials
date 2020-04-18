@@ -3,8 +3,8 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SearchPage } from './search.page';
-import { ThumbnailListModule } from '../thumbnail-list/thumbnail-list.module';
+import { HomePage } from './home.page';
+import { ThumbnailListModule } from 'src/app/thumbnail-list/thumbnail-list.module';
 
 @NgModule({
   imports: [
@@ -12,10 +12,10 @@ import { ThumbnailListModule } from '../thumbnail-list/thumbnail-list.module';
     CommonModule,
     FormsModule,
     ThumbnailListModule,
-    RouterModule.forChild([{ path: '', component: SearchPage }])
+    RouterModule.forChild([{ path: '', component: HomePage }])
   ],
   declarations: [
-    SearchPage
+    HomePage
   ]
 })
-export class SearchPageModule {}
+export class HomePageModule {}
