@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NotificationService } from '../services/notification.service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -8,8 +8,9 @@ import { AuthService } from '../services/auth.service';
   templateUrl: 'notifications.page.html',
   styleUrls: ['notifications.page.scss']
 })
-export class NotificationsPage implements OnInit {
+export class NotificationsPage implements OnInit, OnDestroy {
   user: any;
+  userSub: Subscription;
   notifications$: Observable<any[]>;
 
   constructor(
@@ -18,11 +19,15 @@ export class NotificationsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.auth.user$.subscribe(user => {
+    this.userSub = this.auth.user$.subscribe(user => {
       this.user = user;
       const userId = user && user.uid;
       this.notifications$ = this.notif.getNotifications(userId);
     });
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
   }
 
   async markAsRead(id: string) {

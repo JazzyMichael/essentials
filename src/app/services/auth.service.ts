@@ -16,15 +16,17 @@ export class AuthService {
     private firestore: AngularFirestore
   ) {
     this.auth.authState
-    .pipe(
-      switchMap((user: any) => {
-        return user && user.uid ? this.firestore.doc(`users/${user.uid}`).valueChanges() : of(null);
-      })
-    )
-    .subscribe(user => {
-      console.log({ user });
-      this.user$.next(user);
-    });
+      .pipe(
+        switchMap((user: any) => {
+          return user && user.uid
+            ? this.firestore.doc(`users/${user.uid}`).valueChanges()
+            : of(null);
+        })
+      )
+      .subscribe(user => {
+        console.log({ user });
+        this.user$.next(user);
+      });
   }
 
   updateUser(id: string, key: string, val: any) {

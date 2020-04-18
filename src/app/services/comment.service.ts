@@ -71,9 +71,9 @@ export class CommentService {
 
   // U-pdate
 
-  likeComment(postId: string, commentId: string, userId: string) {
+  likeComment(postId: string, commentId: string, userId: string, likedIds: string[], followerIds: string[]) {
     return this.functions
-      .httpsCallable('like')({ doc: `posts/${postId}/comments/${commentId}`, userId })
+      .httpsCallable('like')({ doc: `posts/${postId}/comments/${commentId}`, userId, likedIds, followerIds })
       .toPromise();
   }
 
@@ -83,9 +83,9 @@ export class CommentService {
       .toPromise();
   }
 
-  likeReply(postId: string, commentId: string, replyId: string, userId: string) {
+  likeReply(postId: string, commentId: string, replyId: string, userId: string, likedIds: string[], followerIds: string[]) {
     return this.functions
-      .httpsCallable('like')({ doc: `posts/${postId}/comments/${commentId}/replies/${replyId}`, userId })
+      .httpsCallable('like')({ doc: `posts/${postId}/comments/${commentId}/replies/${replyId}`, userId, likedIds, followerIds })
       .toPromise();
   }
 

@@ -21,6 +21,7 @@ export class CommentViewPage implements OnInit {
   comment$: Observable<any>;
   commentId: string;
   commentUserId: string;
+  commentLikedIds: string[];
   commentFollowerIds: string[];
   postId: string;
   postUserId: string;
@@ -46,12 +47,14 @@ export class CommentViewPage implements OnInit {
         return this.commentService.watchComment(this.postId, this.commentId);
       }),
       tap(comment => {
+        console.log({ comment });
         this.commentUserId = comment.userId;
         this.postUserId = comment.postUserId;
+        this.commentLikedIds = comment.likedIds && comment.likedIds.length ? comment.likedIds : [];
         this.commentFollowerIds = comment.followerIds && comment.followerIds.length ? comment.followerIds : [];
         const user = this.auth.user$.getValue();
         this.following = user && user.uid && this.commentFollowerIds.includes(user.uid);
-        this.liked = user && user.likedCommentIds && user.likedCommentIds.includes(this.commentId);
+        this.liked = user && user.uid && this.commentLikedIds.includes(user.uid);
       })
     );
   }
@@ -95,7 +98,9 @@ export class CommentViewPage implements OnInit {
       username,
       createdAt: new Date(),
       text: this.reply,
-      likes: 0
+      likes: 0,
+      likedIds: [],
+      followerIds: []
     };
 
     await this.commentService.createReply(postId, commentId, newReply);
@@ -161,7 +166,6 @@ export class CommentViewPage implements OnInit {
     const user = this.auth.user$.getValue();
     if (!user || !user.uid) return;
     const uid = user.uid;
-    await this.commentService.likeComment(this.postId, this.commentId, uid);
     this.liked = true;
     this.following = true;
     const toasty = await this.toast.create({
@@ -170,16 +174,13 @@ export class CommentViewPage implements OnInit {
       position: 'top'
     });
     toasty.present();
-    await this.auth.updateUser(uid, 'likedCommentIds', [ ...user.likedCommentIds.slice(-99), this.commentId ]);
-    this.liked = true;
-    this.following = true;
+    await this.commentService.likeComment(this.postId, this.commentId, uid, this.commentLikedIds, this.commentFollowerIds);
   }
 
   async unlike() {
     const user = this.auth.user$.getValue();
     if (!user || !user.uid) return;
     const uid = user.uid;
-    await this.commentService.unlikeComment(this.postId, this.commentId, uid);
     this.liked = false;
     const toasty = await this.toast.create({
       message: 'Unliked comment :)',
@@ -187,8 +188,7 @@ export class CommentViewPage implements OnInit {
       position: 'top'
     });
     toasty.present();
-    await this.auth.updateUser(uid, 'likedCommentIds', user.likedCommentIds.filter(id => id !== this.commentId));
-    this.liked = false;
+    await this.commentService.unlikeComment(this.postId, this.commentId, uid);
   }
 
   async deleteComment() {

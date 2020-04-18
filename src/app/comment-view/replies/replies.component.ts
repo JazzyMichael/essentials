@@ -73,6 +73,23 @@ export class RepliesComponent implements OnInit, OnDestroy, OnChanges {
     this.replies$.next(comments);
   }
 
+  iconName(comment, user) {
+    if (user && user.uid && comment && comment.likedIds && comment.likedIds.includes(user.uid) || comment.liked) {
+      return 'thumbs-up';
+    } else {
+      return 'thumbs-up-outline';
+    }
+  }
+
+  async toggleLike(comment: any) {
+    if (!this.user || !comment) return console.log('nope');
+    if (comment && comment.likedIds && comment.likedIds.includes(this.user.uid)) {
+      await this.unlikeReply(comment);
+    } else {
+      await this.likeReply(comment);
+    }
+  }
+
   async likeReply(reply: any) {
     if (!this.user) return;
     const uid = this.user.uid;
@@ -84,8 +101,7 @@ export class RepliesComponent implements OnInit, OnDestroy, OnChanges {
     toasty.present();
     reply.likes++;
     reply.liked = true;
-    await this.commentService.likeReply(this.postId, this.commentId, reply.id, uid);
-    await this.auth.updateUser(uid, 'likedReplyIds', [ ...this.user.likedReplyIds.slice(-99), reply.id ]);
+    await this.commentService.likeReply(this.postId, this.commentId, reply.id, uid, reply.likedIds, reply.followerIds);
   }
 
   async unlikeReply(reply: any) {
@@ -100,7 +116,6 @@ export class RepliesComponent implements OnInit, OnDestroy, OnChanges {
     reply.likes--;
     reply.liked = false;
     await this.commentService.unlikeReply(this.postId, this.commentId, reply.id, uid);
-    await this.auth.updateUser(uid, 'likedReplyIds', this.user.likedReplyIds.filter(id => id !== reply.id));
   }
 
 }

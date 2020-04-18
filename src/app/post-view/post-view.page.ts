@@ -24,6 +24,7 @@ export class PostViewPage implements OnInit {
   post$: Observable<any>;
   postId: string;
   postUserId: string;
+  postLikedIds: string[];
   postFollowerIds: string[];
   postTitle: string;
   comment: string;
@@ -52,65 +53,41 @@ export class PostViewPage implements OnInit {
         console.log({ post });
         this.postUserId = post.userId;
         this.postFollowerIds = post.followerIds && post.followerIds.length ? post.followerIds : [];
+        this.postLikedIds = post.likedIds && post.likedIds.length ? post.likedIds : [];
         this.postTitle = post.title || '';
         const user = this.auth.user$.getValue();
         this.following = user && user.uid && this.postFollowerIds.includes(user.uid);
-        this.liked = user && user.likedPostIds && user.likedPostIds.includes(this.postId);
+        this.liked = user && user.uid && this.postLikedIds.includes(user.uid);
       })
     );
   }
 
-  async like() {
-    // increment post likes
-    // update post followers
-    // update user liked posts
-    const user = this.auth.user$.getValue();
-    if (!user) {
-      const toa = await this.toast.create({
-        message: 'Login to like posts',
-        duration: 2000,
-        position: 'top'
-      });
-      toa.present();
-      return this.router.navigateByUrl('/tabs/user');
-    }
+  async like(postId: string, postLikedIds: string[], postFollowerIds: string[]) {
     const toasty = await this.toast.create({
       message: 'Liked Post :)',
       duration: 1500,
       position: 'top'
     });
     toasty.present();
+    const { uid } = this.auth.user$.getValue();
     this.liked = true;
     this.following = true;
-    const uid = user.uid;
-    user.likedPostIds = user.likedPostIds || [];
-    await this.postService.likePost(this.postId, uid);
-    await this.auth.updateUser(uid, 'likedPostIds', [ ...user.likedPostIds.slice(-99), this.postId ]);
-    const oldId = this.postFollowerIds.length > 99 ? this.postFollowerIds[this.postFollowerIds.length - 1] : undefined;
-    await this.follow.addFollower(`posts/${this.postId}`, uid, oldId);
-    this.liked = true;
-    this.following = true;
+    await this.postService.likePost(this.postId, uid, postLikedIds, postFollowerIds);
   }
 
-  async unlike() {
-    // decrement post likes
-    // update user liked posts
+  async unlike(postId: string) {
     const toasty = await this.toast.create({
       message: 'Unliked :(',
       duration: 1500,
       position: 'top'
     });
     toasty.present();
-    let { uid, likedPostIds } = this.auth.user$.getValue();
-    likedPostIds = likedPostIds && likedPostIds.length ? likedPostIds : [];
+    const { uid } = this.auth.user$.getValue();
     this.liked = false;
     await this.postService.unlikePost(this.postId, uid);
-    await this.auth.updateUser(uid, 'likedPostIds', likedPostIds.filter(id => id !== this.postId));
-    this.liked = false;
   }
 
   async toggleFollowing() {
-    // update post followers
     const { uid } = (this.auth.user$.getValue() || { uid: null });
 
     if (!uid) return;
@@ -150,7 +127,8 @@ export class PostViewPage implements OnInit {
       createdAt: new Date(),
       text: this.comment,
       likes: 0,
-      followerIds: [uid]
+      followerIds: [uid],
+      likedIds: []
     };
 
     await this.commentService.createComment(newComment);

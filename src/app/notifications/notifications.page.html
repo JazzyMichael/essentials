@@ -9,18 +9,23 @@
 <ion-content [fullscreen]="true" style="text-align: center;">
 
   <ion-list *ngIf="user">
+
     <ion-item *ngFor="let item of notifications$ | async" [routerLink]="item.route" (click)="markAsRead(item.id)">
+
       <ion-avatar slot="start">
         <ion-icon *ngIf="item.read" [name]="item.icon + '-outline'" style="opacity: 0.5;" color="secondary"></ion-icon>
         <ion-icon *ngIf="!item.read" [name]="item.icon" color="secondary"></ion-icon>
       </ion-avatar>
+
       <ion-label>
         <ion-text [color]="item.read ? 'medium' : ''">
           <h2>{{ item.title }}</h2>
         </ion-text>
         <p>{{ item.subtitle }}</p>
       </ion-label>
+
     </ion-item>
+
   </ion-list>
 
 </ion-content>

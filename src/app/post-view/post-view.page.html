@@ -31,7 +31,7 @@
   </div>
 
   <div style="display: flex; justify-content: space-around;">
-    <ion-button expand="full" style="flex-grow: 1;" (click)="liked ? unlike() : like()">
+    <ion-button expand="full" style="flex-grow: 1;" (click)="liked ? unlike(post.id) : like(post.id, post.likedIds, post.followerIds)">
       <span slot="start" style="margin-top: 4px">{{ liked ? 'Liked' : 'Like' }}</span>
       <ion-icon *ngIf="liked" name="thumbs-up" slot="end"></ion-icon>
       <ion-icon *ngIf="!liked" name="thumbs-up-outline" slot="end"></ion-icon>
@@ -47,18 +47,24 @@
   <app-comments [postId]="postId"></app-comments>
 </ion-content>
 
+
+
+
 <ion-footer>
   <ion-toolbar>
+
     <ion-item *ngIf="auth.user$ | async; else noUser" lines="none">
       <ion-icon size="small" slot="start" name="chatbubbles" color="primary"></ion-icon>
       <ion-input [(ngModel)]="comment" placeholder="Write a Comment..." (keyup.enter)="addComment()"></ion-input>
       <ion-icon *ngIf="comment?.length" (click)="addComment()" size="small" slot="end" name="paper-plane" color="primary"></ion-icon>
     </ion-item>
+
     <ng-template #noUser>
       <ion-item routerLink="/tabs/user" lines="none">
         <ion-icon size="small" slot="start" name="chatbubbles" color="primary"></ion-icon>
         <ion-label color="primary">Login to Comment</ion-label>
       </ion-item>
     </ng-template>
+
   </ion-toolbar>
 </ion-footer>

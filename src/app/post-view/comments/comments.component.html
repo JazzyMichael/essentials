@@ -29,9 +29,9 @@
     <p style="margin: 0 0 0.5em 0.5em; font-size: 0.8em; text-align: center;">View Replies</p>
   </ion-card>
 
-  <ion-badge (click)="comment.liked ? unlikeComment(comment) : likeComment(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 2em;">
+  <ion-badge (click)="toggleLike(comment)" style="z-index: 10; position: absolute; bottom: 1em; right: 2em;">
     {{ comment.likes ? comment.likes : '' }}
-    <ion-icon [name]="comment.liked ? 'thumbs-up' : 'thumbs-up-outline'"></ion-icon>
+    <ion-icon [name]="iconName(comment, user)"></ion-icon>
   </ion-badge>
 </div>
 

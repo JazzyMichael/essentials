@@ -54,7 +54,8 @@ export class SubmitPage implements OnInit {
       userCompany: user.company || this.postForm.value.company || '',
       username: user.username,
       likes: 0,
-      followerIds: [user.uid]
+      followerIds: [user.uid],
+      likedIds: []
     };
 
     const { id } = await this.postService.createPost(post);

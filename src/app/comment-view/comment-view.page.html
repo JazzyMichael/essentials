@@ -22,8 +22,8 @@
     <ion-card-content>
       <ion-badge *ngIf="comment.likes" style="position: absolute; top: 1em; right: 1em;">
         {{ comment.likes }}
-        <ion-icon *ngIf="comment.liked" name="thumbs-up"></ion-icon>
-        <ion-icon *ngIf="!comment.liked" name="thumbs-up-outline"></ion-icon>
+        <ion-icon *ngIf="liked" name="thumbs-up"></ion-icon>
+        <ion-icon *ngIf="!liked" name="thumbs-up-outline"></ion-icon>
       </ion-badge>
       <p>(Commented from 'Post Title')</p>
       <p [routerLink]="'/user-posts/' + commentUserId">{{ comment.username }}</p>

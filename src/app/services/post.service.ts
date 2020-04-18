@@ -68,25 +68,24 @@ export class PostService {
   getPostsBySearchTerm(term: string = '') {
     const searchTerm = term.toLowerCase().trim();
     if (!searchTerm) return of([]);
+
     const title$ = this.firestore.collection('posts',
       ref => ref
         .where('lowerCaseTitle', '>=', searchTerm)
         .where('lowerCaseTitle', '<=', searchTerm + 'z')
         .limit(40)
-    ).valueChanges({ idField: 'id' });
+      ).valueChanges({ idField: 'id' });
 
     const company$ = this.firestore.collection('posts',
       ref => ref
         .where('lowerCaseCompany', '>=', searchTerm)
         .where('lowerCaseCompany', '<=', searchTerm + 'z')
         .limit(40)
-    ).valueChanges({ idField: 'id' });
+      ).valueChanges({ idField: 'id' });
 
     return combineLatest([title$, company$])
       .pipe(
-        switchMap(([titles, companys]) => {
-          return of([...titles, ...companys]);
-        }),
+        switchMap(([titles, companys]) => of([...titles, ...companys])),
         distinct((post: any) => post.id)
       );
   }
@@ -99,9 +98,9 @@ export class PostService {
     return this.firestore.doc(`posts/${postId}`).delete();
   }
 
-  likePost(postId: string, userId: string) {
+  likePost(postId: string, userId: string, likedIds: string[], followerIds: string[]) {
     return this.functions
-      .httpsCallable('like')({ doc: `posts/${postId}`, userId })
+      .httpsCallable('like')({ doc: `posts/${postId}`, userId, likedIds, followerIds })
       .toPromise();
   }
 

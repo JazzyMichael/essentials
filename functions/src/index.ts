@@ -18,11 +18,7 @@ export const createUser = functions.auth.user().onCreate((user: any) => {
         createdAt,
         username,
         lowerCaseUsername: username.toLowerCase(),
-        posts: 0,
-        likes: 0,
-        likedPostIds: [],
-        likedCommentIds: [],
-        likedReplyIds: []
+        posts: 0
     };
 
     return db.doc(`users/${user.uid}`).set(newUser);
@@ -71,17 +67,35 @@ export const removeFollower = functions.https.onCall(({ doc, id }) => {
 });
 
 
-// Like & Unlike posts, comments, & replies
-export const like = functions.https.onCall(({ doc, userId }) => {
-    if (!doc || !userId) throw new Error('invalid like');
+// Like posts, comments, replies -> automatically follow
+export const like = functions.https.onCall(async ({ doc, userId, likedIds, followerIds }) => {
+    if (!doc || !userId || !likedIds) throw new Error('invalid like');
+
+    if (likedIds && likedIds.length > 100) {
+        const arrayRemove = admin.firestore.FieldValue.arrayRemove(likedIds[0]);
+        await db.doc(doc).update({ likedIds: arrayRemove });
+    }
+
+    if (followerIds && followerIds.length > 100) {
+        const arrayRemove = admin.firestore.FieldValue.arrayRemove(followerIds[0]);
+        await db.doc(doc).update({ followerIds: arrayRemove });
+    }
+
     const increment = admin.firestore.FieldValue.increment(1);
-    return db.doc(doc).update({ likes: increment });
+    const likedUnion = admin.firestore.FieldValue.arrayUnion(userId);
+    const followerUnion = admin.firestore.FieldValue.arrayUnion(userId);
+
+    await db.doc(doc).update({ likes: increment, likedIds: likedUnion, followerIds: followerUnion });
 });
 
-export const unlike = functions.https.onCall(({ doc, userId }) => {
+// Unlike posts, comments, replies - stay following
+export const unlike = functions.https.onCall(async ({ doc, userId }) => {
     if (!doc || !userId) throw new Error('invalid unlike');
+
     const decrement = admin.firestore.FieldValue.increment(-1);
-    return db.doc(doc).update({ likes: decrement });
+    const likedRemove = admin.firestore.FieldValue.arrayRemove(userId);
+
+    await db.doc(doc).update({ likes: decrement, likedIds: likedRemove });
 });
 
 
@@ -91,7 +105,6 @@ export const notify = functions.https.onCall(async ({ followerIds, notification 
     if (!followerIds || !notification) throw new Error('invalid notification');
     if (!followerIds.length) console.log('no followerIds');
     for (const id of followerIds) {
-        console.log('adding notification for user: ' + id);
         await db.collection(`users/${id}/notifications`).add(notification);
     }
 });
