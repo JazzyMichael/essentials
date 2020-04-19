@@ -29,8 +29,13 @@ export class IntroSlidesPage implements OnInit, OnDestroy {
   }
 
   async login() {
+    this.router.navigateByUrl('/tabs');
     await this.auth.login();
     this.analytics.logEvent('login');
+  }
+
+  goToGithub() {
+    window.open('https://github.com/Jappzy/essentials', '_blank');
   }
 
 }

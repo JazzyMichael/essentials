@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController, ActionSheetController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { PostService } from '../../services/post.service';
 import { CommentService } from '../../services/comment.service';
 import { AuthService } from '../../services/auth.service';
@@ -18,14 +18,11 @@ const { Share, Clipboard } = Plugins;
   styleUrls: ['./post-view.page.scss'],
 })
 export class PostViewPage implements OnInit {
-  following: boolean;
-  liked: boolean;
   post$: Observable<any>;
+  post: any;
   postId: string;
-  postUserId: string;
-  postLikedIds: string[];
-  postFollowerIds: string[];
-  postTitle: string;
+  liked: boolean;
+  following: boolean;
   comment: string;
 
   constructor(
@@ -41,22 +38,26 @@ export class PostViewPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.following = false;
     this.post$ = this.route.paramMap.pipe(
       switchMap(params => {
         this.postId = params.get('id');
         return this.postService.getPostById(this.postId);
       }),
-      tap(post => {
+      switchMap((post: any) => {
         console.log({ post });
-        this.postUserId = post.userId;
-        this.postFollowerIds = post.followerIds && post.followerIds.length ? post.followerIds : [];
-        this.postLikedIds = post.likedIds && post.likedIds.length ? post.likedIds : [];
-        this.postTitle = post.title || '';
-        const user = this.auth.user$.getValue();
-        this.following = user && user.uid && this.postFollowerIds.includes(user.uid);
-        this.liked = user && user.uid && this.postLikedIds.includes(user.uid);
+        this.post = post;
+        return of({ ...post, id: this.postId });
       })
+      // tap(post => {
+      //   console.log({ post });
+      //   this.postUserId = post.userId;
+      //   this.postFollowerIds = post.followerIds && post.followerIds.length ? post.followerIds : [];
+      //   this.postLikedIds = post.likedIds && post.likedIds.length ? post.likedIds : [];
+      //   this.postTitle = post.title || '';
+      //   const user = this.auth.user$.getValue();
+      //   this.following = user && user.uid && this.postFollowerIds.includes(user.uid);
+      //   this.liked = user && user.uid && this.postLikedIds.includes(user.uid);
+      // })
     );
   }
 
@@ -100,7 +101,7 @@ export class PostViewPage implements OnInit {
     this.following = !this.following;
 
     if (this.following) {
-      const oldId = this.postFollowerIds.length > 99 ? this.postFollowerIds[this.postFollowerIds.length - 1] : undefined;
+      const oldId = this.post.followerIds.length > 99 ? this.post.followerIds[this.post.followerIds.length - 1] : undefined;
       await this.follow.addFollower(`posts/${this.postId}`, uid, oldId);
       console.log('followed');
     } else {
@@ -120,7 +121,7 @@ export class PostViewPage implements OnInit {
     const newComment = {
       userId: uid,
       postId,
-      postUserId: this.postUserId,
+      postUserId: this.post.userId,
       username,
       createdAt: new Date(),
       text: this.comment,
@@ -140,13 +141,13 @@ export class PostViewPage implements OnInit {
     toasty.present();
 
     this.following = true;
-    const oldId = this.postFollowerIds.length > 99 ? this.postFollowerIds[this.postFollowerIds.length - 1] : undefined;
+    const oldId = this.post.followerIds.length > 99 ? this.post.followerIds[this.post.followerIds.length - 1] : undefined;
 
     await this.follow.addFollower(`posts/${postId}`, uid, oldId);
 
-    await this.notifications.notify(this.postFollowerIds, {
+    await this.notifications.notify(this.post.followerIds, {
       icon: 'ice-cream',
-      title: this.postTitle,
+      title: this.post.title,
       subtitle: 'New comment!',
       route: `/post-view/${postId}`
     });
@@ -168,7 +169,7 @@ export class PostViewPage implements OnInit {
 
     const { uid } = this.auth.user$.getValue();
 
-    if (this.postUserId === uid) {
+    if (this.post.userId === uid) {
       buttons.push({
         text: 'Delete',
         role: 'destructive',
@@ -202,7 +203,7 @@ export class PostViewPage implements OnInit {
     try {
       await Share.share({
         title: 'Essentials Anonymous',
-        text: this.postTitle || 'Real stories from real essentials',
+        text: this.post.title || 'Real stories from real essentials',
         url: `http://essentialsanonymous.com/post-view/${this.postId}`,
         dialogTitle: 'Share with buddies'
       });
@@ -225,7 +226,7 @@ export class PostViewPage implements OnInit {
     const report = {
       type: 'post',
       postId: this.postId,
-      postUserId: this.postUserId,
+      postUserId: this.post.userId,
       userId: user ? user.uid : ''
     };
     await this.postService.report(report);
@@ -237,13 +238,13 @@ export class PostViewPage implements OnInit {
   }
 
   async delete() {
-    await this.postService.deletePost(this.postId);
-    this.router.navigateByUrl('/user');
     const toasty = await this.toast.create({
       message: 'Post has been deleted.',
       duration: 1500
     });
     toasty.present();
+    await this.postService.deletePost(this.postId);
+    this.router.navigateByUrl('/user');
   }
 
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { of, forkJoin, combineLatest } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { switchMap, tap, distinct, map } from 'rxjs/operators';
+import { combineLatest, of } from 'rxjs';
+import { map, switchMap, distinct } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -112,5 +112,17 @@ export class PostService {
 
   report(obj: any) {
     return this.firestore.collection('reports').add(obj);
+  }
+
+  addFollower(doc: string, newId: string, oldId?: string) {
+    return this.functions
+      .httpsCallable('addFollower')({ doc, newId, oldId })
+      .toPromise();
+  }
+
+  removeFollower(doc: string, id: string) {
+    return this.functions
+      .httpsCallable('removeFollower')({ doc, id })
+      .toPromise();
   }
 }

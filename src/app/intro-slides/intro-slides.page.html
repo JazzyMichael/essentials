@@ -1,18 +1,22 @@
-<ion-content fullscreen scroll-y="false">
+<ion-content class="narrow" fullscreen scroll-y="false">
   <ion-slides pager="true" style="height: 100%; background: linear-gradient(25deg, #1734e0, #59daf1); color: white;">
+    
     <ion-slide style="flex-direction: column; justify-content: space-around; padding: 2em;">
       <img src="assets/welcome-cats.svg" alt="Welcome Image" style="width: 90%;">
       <h1>Essentials Anonymous</h1>
-      <p>The platform to share thoughts, stories, and experiences as an essential worker- or essential human during the COVID-19 crisis.</p>
+      <p>The platform to share thoughts, stories, and experiences as an essential worker... or just as an essential human.</p>
     </ion-slide>
+    
     <ion-slide style="flex-direction: column; justify-content: space-around; padding: 2em;">
       <img src="assets/chat.svg" alt="Welcome Image" style="width: 90%;">
       <h1>Submit posts and engage in the comments</h1>
     </ion-slide>
+    
     <ion-slide style="flex-direction: column; justify-content: space-around; padding: 2em;">
       <img src="assets/customize.svg" alt="Welcome Image" style="width: 90%;">
       <h1>Dark Mode and theming allows for customization and hours of fun!</h1>
     </ion-slide>
+    
     <ion-slide style="flex-direction: column; justify-content: center; padding: 2em;">
       <img src="assets/reading.svg" alt="Welcome Image" style="width: 90%; margin: 20px auto 0;">
       <ion-button routerLink="/tabs" (click)="login()" color="light" fill="outline">
@@ -21,5 +25,42 @@
       </ion-button>
       <br>
     </ion-slide>
+  
   </ion-slides>
+</ion-content>
+
+<ion-content class="wide">
+  <div class="widescreen-grid">
+
+    <ion-card>
+      <img src="assets/welcome-cats.svg" alt="Welcome Image">
+      <ion-card-content>
+        <h4>The platform to share thoughts, stories, and experiences as an essential worker... or just as an essential human.</h4>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <img src="assets/chat.svg" alt="Welcome Image">
+      <h3>Submit posts and engage in the comments</h3>
+    </ion-card>
+
+    <ion-card class="login-grid-item" (click)="login()">
+      <img src="assets/reading.svg" alt="Welcome Image">
+      <ion-button color="tertiary" fill="outline">
+        Continue Anonymously
+        <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </ion-button>
+    </ion-card>
+
+    <ion-card>
+      <img src="assets/customize.svg" alt="Welcome Image">
+      <h3>Dark Mode and theming allows for customization and hours of fun!</h3>
+    </ion-card>
+
+    <ion-card (click)="goToGithub()">
+      <svg role="img" height="80" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub Icon</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg>
+      <h3>Open Source on Github</h3>
+    </ion-card>
+
+  </div>
 </ion-content>

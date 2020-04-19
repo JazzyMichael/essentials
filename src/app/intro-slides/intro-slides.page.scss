@@ -1,0 +1,69 @@
+.wide {
+    display: none;
+}
+
+.login-grid-item {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    border: 3px solid var(--ion-color-tertiary);
+}
+
+.login-grid-item:hover {
+    transform: scale(1.2) !important;
+    border: 8px solid var(--ion-color-secondary) !important;
+}
+
+@media (min-width: 777px) {
+    .narrow {
+        display: none !important;
+    }
+
+    .wide {
+        display: initial;
+    }
+
+    .widescreen-grid {
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 1em;
+        height: 100vh;
+        padding-bottom: 20px;
+        background-color: #2f2f33;
+    }
+
+    .widescreen-grid > * {
+        place-self: stretch;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: 100ms all ease-in;
+    }
+
+    .widescreen-grid ion-card img {
+        max-height: 60%;
+    }
+
+    .widescreen-grid > *:hover {
+        transform: translateY(5px);
+        box-shadow: none;
+        color: white;
+        border: 2px solid white;
+        background-size: 333%;
+        background-image: repeating-linear-gradient(60deg, #ee6352, purple, #ee6352, purple);
+        animation: gradient-animation 666ms infinite ease-in-out;
+    }
+}
+
+@keyframes gradient-animation {
+    0% {
+        background-position: left;
+    }
+    100% {
+        background-position: right;
+    }
+}
