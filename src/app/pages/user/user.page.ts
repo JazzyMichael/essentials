@@ -44,6 +44,7 @@ export class UserPage implements OnInit {
     await Storage.clear();
     await this.auth.logout();
     this.analytics.logEvent('logout');
+    this.router.navigateByUrl('/');
   }
 
   editInfo() {
