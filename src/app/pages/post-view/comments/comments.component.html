@@ -15,7 +15,7 @@
 
 <div *ngFor="let comment of comments$ | async" style="position: relative;">
   <ion-card
-    [ngStyle]="{ 'border-left': comment.userId === user.uid ? '8px solid var(--ion-color-secondary)' : '4px solid var(--ion-color-primary)' }"
+    [ngStyle]="{ 'border-left': user && user.uid === comment.userId ? '8px solid var(--ion-color-secondary)' : '4px solid var(--ion-color-primary)' }"
     [routerLink]="'/comment-view/' + comment.postId + '/' + comment.id">
 
     <ion-card-header>
