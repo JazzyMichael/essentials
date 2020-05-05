@@ -27,9 +27,9 @@ export class CommentViewPage implements OnInit {
   reply: string;
 
   constructor(
+    public auth: AuthService,
     private toast: ToastController,
     private actionSheet: ActionSheetController,
-    private auth: AuthService,
     private route: ActivatedRoute,
     private router: Router,
     private commentService: CommentService,

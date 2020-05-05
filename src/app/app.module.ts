@@ -14,6 +14,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import { AngularFireAnalyticsModule, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { AngularFireAnalyticsModule, ScreenTrackingService, UserTrackingService 
     AngularFireAnalyticsModule,
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularFireFunctionsModule
+    AngularFireFunctionsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     ScreenTrackingService,
