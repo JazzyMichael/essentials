@@ -1,7 +1,7 @@
 <ion-content>
 
   <div *ngIf="!hideAnnouncement" class="announcement">
-    <ion-icon (click)="hideAnnouncement = true" style="display: block; margin: 0 0 0 auto; font-size: 24px;" name="close-outline"></ion-icon>
+    <ion-icon (click)="hideAnnouncement = true" style="display: block; margin: 0 0 0 auto; font-size: 24px; cursor: pointer;" name="close-outline"></ion-icon>
     <h2>Welcome to Essentials Anonymous!</h2>
     <p style="padding: 8px">The best place to talk anonymously about pandemic experiences.</p>
     <ion-button routerLink="/about" color="secondary" expand="full" style="margin: 0;">

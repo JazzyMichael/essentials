@@ -1,5 +1,6 @@
 <ion-tabs>
 
+  <!-- Mobile -->
   <ion-tab-bar color="primary" slot="bottom" class="bottom-tab-bar">
     <ion-tab-button tab="home">
       <ion-icon name="home"></ion-icon>
@@ -23,31 +24,26 @@
   </ion-tab-bar>
 
 
-
+  <!-- Desktop -->
   <ion-tab-bar color="primary" slot="top" class="top-tab-bar">
-    <ion-tab-button tab="home">
+    <ion-tab-button tab="home" matTooltip="Home" matTooltipClass="tooltip">
       <ion-icon name="home"></ion-icon>
-      <ion-label>Home</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="search">
+    <ion-tab-button tab="search" matTooltip="Search" matTooltipClass="tooltip">
       <ion-icon name="search"></ion-icon>
-      <ion-label>Search</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="notifications">
+    <ion-tab-button tab="notifications" matTooltip="Notifications" matTooltipClass="tooltip">
       <ion-icon name="notifications"></ion-icon>
-      <ion-label>Notifications</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="user">
+    <ion-tab-button tab="user" matTooltip="More" matTooltipClass="tooltip">
       <ion-icon name="settings"></ion-icon>
-      <ion-label>Info</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="submit">
+    <ion-tab-button tab="submit" matTooltip="New Post" matTooltipClass="tooltip">
       <ion-icon name="add-circle"></ion-icon>
-      <ion-label>New Post</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 
