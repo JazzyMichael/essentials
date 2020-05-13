@@ -44,4 +44,8 @@
 
   <p style="text-align: center; margin-top: 15vh;">Direct all inquiries to <a href="mailto:essentialinquiries@gmail.com">essentialinquiries@gmail.com</a></p>
 
+  <ion-button *ngIf="auth.user$ | async" (click)="auth.logout()" expand="block" style="margin: 2em auto; max-width: 777px;">
+    Logout (forever)
+  </ion-button>
+
 </ion-content>
