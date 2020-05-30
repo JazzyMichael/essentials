@@ -55,7 +55,7 @@
 
     <ion-item *ngIf="auth.user$ | async; else noUser" lines="none">
       <ion-icon size="small" slot="start" name="chatbubbles" color="primary"></ion-icon>
-      <ion-textarea [(ngModel)]="comment" placeholder="Write a Comment..." (keyup.enter)="addComment()" auto-grow="true"></ion-textarea>
+      <ion-textarea [(ngModel)]="comment" placeholder="Write a Comment..." (keyup.enter)="addComment()" auto-grow="true" style="padding: 16px 0px 4px"></ion-textarea>
       <ion-icon *ngIf="comment?.length" (click)="addComment()" size="small" slot="end" name="paper-plane" color="primary"></ion-icon>
     </ion-item>
 

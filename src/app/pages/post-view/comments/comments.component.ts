@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { CommentService } from 'src/app/services/comment.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ToastController } from '@ionic/angular';
@@ -35,9 +35,9 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
     this.userSub.unsubscribe();
   }
 
-  async ngOnChanges() {
-    if (!this.postId) return;
-    const comments = await this.commentService.getComments(this.postId, this.sort);
+  async ngOnChanges({ postId }: SimpleChanges) {
+    if (!postId || !postId.currentValue) return;
+    const comments = await this.commentService.getComments(postId.currentValue, this.sort);
     this.lastComment = comments[comments.length - 1];
     this.commentCount = comments.length;
     this.comments$.next(comments);

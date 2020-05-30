@@ -46,7 +46,7 @@
   <ion-toolbar>
     <ion-item *ngIf="auth.user$ | async; else noUser" lines="none">
       <ion-icon size="small" slot="start" name="chatbubbles" color="primary"></ion-icon>
-      <ion-textarea [(ngModel)]="reply" placeholder="Reply..." (keyup.enter)="addReply()" auto-grow="true"></ion-textarea>
+      <ion-textarea [(ngModel)]="reply" placeholder="Reply..." (keyup.enter)="addReply()" auto-grow="true" style="padding: 16px 0px 4px"></ion-textarea>
       <ion-icon *ngIf="reply?.length" (click)="addReply()" size="small" slot="end" name="paper-plane" color="primary"></ion-icon>
     </ion-item>
     <ng-template #noUser>

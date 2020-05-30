@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, QuerySnapshot, DocumentData } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { combineLatest, of } from 'rxjs';
 import { map, switchMap, distinct } from 'rxjs/operators';
@@ -14,20 +14,16 @@ export class PostService {
     private functions: AngularFireFunctions
   ) { }
 
-  snapshotsToArray(snapshots: any) {
-    const arrA = [];
-    snapshots.forEach(doc => {
-      arrA.push({ id: doc.id, ...doc.data() });
+  snapshotsToArray(snapshots: QuerySnapshot<DocumentData>) {
+    return snapshots.docs.map((doc: DocumentData) => {
+      return { id: doc.id, ...doc.data() };
     });
-    return arrA;
   }
 
   getFirst(sort: string) {
     return this.firestore.collection('posts',
         ref => ref.orderBy(sort, 'desc').limit(6)
-      ).get()
-      .pipe(map(this.snapshotsToArray))
-      .toPromise();
+      ).get().pipe(map(this.snapshotsToArray)).toPromise();
   }
 
   getMore(sort: string, last: any) {
