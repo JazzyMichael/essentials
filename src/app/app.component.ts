@@ -18,8 +18,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      console.log('platform ready');
-      /* TODO: set up capacitor plugins for native apps:
+      /* TODO: capacitor plugins for:
         - status bar
         - splash screen
       */

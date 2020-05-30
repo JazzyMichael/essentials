@@ -44,7 +44,6 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async loadMore(event: any) {
-    console.log('loading more');
     this.infScr = event.target;
     if (!this.postId || !this.sort || !this.lastComment) {
       event.target.complete();
@@ -78,7 +77,7 @@ export class CommentsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async toggleLike(comment: any) {
-    if (!this.user || !comment) return console.log('nope');
+    if (!this.user || !comment) return;
     if (comment && comment.likedIds && comment.likedIds.includes(this.user.uid)) {
       await this.unlikeComment(comment);
     } else {

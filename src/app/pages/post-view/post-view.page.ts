@@ -103,10 +103,8 @@ export class PostViewPage implements OnInit {
     if (this.following) {
       const oldId = this.post.followerIds.length > 99 ? this.post.followerIds[this.post.followerIds.length - 1] : undefined;
       await this.follow.addFollower(`posts/${this.postId}`, uid, oldId);
-      console.log('followed');
     } else {
       await this.follow.removeFollower(`posts/${this.postId}`, uid);
-      console.log('unfollowed');
     }
   }
 
@@ -161,9 +159,7 @@ export class PostViewPage implements OnInit {
       role: '',
       icon: 'share-outline',
       handler: () => {
-        this.share().then(() => {
-          console.log('shared');
-        });
+        this.share().then(() => {});
       }
     }];
 
@@ -175,9 +171,7 @@ export class PostViewPage implements OnInit {
         role: 'destructive',
         icon: 'trash-bin',
         handler: () => {
-          this.delete().then(() => {
-            console.log('deleted');
-          });
+          this.delete().then(() => {});
         }
       });
     } else {
@@ -186,9 +180,7 @@ export class PostViewPage implements OnInit {
         role: 'destructive',
         icon: 'megaphone-outline',
         handler: () => {
-          this.report().then(() => {
-            console.log('reported');
-          });
+          this.report().then(() => {});
         }
       });
     }
@@ -218,7 +210,6 @@ export class PostViewPage implements OnInit {
       });
       toasty.present();
     }
-
   }
 
   async report() {

@@ -73,10 +73,8 @@ export class CommentViewPage implements OnInit {
     if (this.following) {
       const oldId = this.commentFollowerIds.length > 99 ? this.commentFollowerIds[this.commentFollowerIds.length - 1] : undefined;
       await this.follow.addFollower(`posts/${this.postId}/comments/${this.commentId}`, uid, oldId);
-      console.log('followed');
     } else {
       await this.follow.removeFollower(`posts/${this.postId}/comments/${this.commentId}`, uid);
-      console.log('unfollowed');
     }
   }
 
@@ -136,9 +134,7 @@ export class CommentViewPage implements OnInit {
         role: 'destructive',
         icon: 'trash-bin',
         handler: () => {
-          this.deleteComment().then(() => {
-            console.log('deleted');
-          });
+          this.deleteComment().then(() => {});
         }
       });
     } else {
@@ -147,9 +143,7 @@ export class CommentViewPage implements OnInit {
         role: 'destructive',
         icon: 'megaphone-outline',
         handler: () => {
-          this.reportComment().then(() => {
-            console.log('reported');
-          });
+          this.reportComment().then(() => {});
         }
       });
     }

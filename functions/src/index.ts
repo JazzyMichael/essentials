@@ -1,5 +1,3 @@
-// https://firebase.google.com/docs/functions/typescript
-
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
@@ -26,7 +24,6 @@ export const createUser = functions.auth.user().onCreate((user: any) => {
 
 
 
-
 export const createPost = functions.firestore
     .document('posts/{postId}')
     .onCreate((snap, context) => {
@@ -35,7 +32,6 @@ export const createPost = functions.firestore
         const increment = admin.firestore.FieldValue.increment(1);
         return db.doc(`users/${post.userId}`).update({ posts: increment });
     });
-
 
 
 
@@ -49,6 +45,7 @@ export const deletePost = functions.firestore
     });
 
 
+
 // Following posts & comments
 export const addFollower = functions.https.onCall(async ({ doc, newId, oldId }) => {
     if (!doc || !newId) throw new Error('invalid follow');
@@ -60,11 +57,14 @@ export const addFollower = functions.https.onCall(async ({ doc, newId, oldId }) 
     await db.doc(doc).update({ followerIds: arrayUnion });
 });
 
+
+
 export const removeFollower = functions.https.onCall(({ doc, id }) => {
     if (!doc || !id) throw new Error('invalid follow');
     const arrayRemove = admin.firestore.FieldValue.arrayRemove(id);
     return db.doc(doc).update({ followerIds: arrayRemove });
 });
+
 
 
 // Like posts, comments, replies -> automatically follow
@@ -88,6 +88,8 @@ export const like = functions.https.onCall(async ({ doc, userId, likedIds, follo
     await db.doc(doc).update({ likes: increment, likedIds: likedUnion, followerIds: followerUnion });
 });
 
+
+
 // Unlike posts, comments, replies - stay following
 export const unlike = functions.https.onCall(async ({ doc, userId }) => {
     if (!doc || !userId) throw new Error('invalid unlike');
@@ -103,8 +105,9 @@ export const unlike = functions.https.onCall(async ({ doc, userId }) => {
 // Notifications
 export const notify = functions.https.onCall(async ({ followerIds, notification }) => {
     if (!followerIds || !notification) throw new Error('invalid notification');
-    if (!followerIds.length) console.log('no followerIds');
     for (const id of followerIds) {
         await db.collection(`users/${id}/notifications`).add(notification);
     }
 });
+
+

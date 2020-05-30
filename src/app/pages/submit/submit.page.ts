@@ -39,8 +39,11 @@ export class SubmitPage implements OnInit {
   async submit() {
     const user = this.auth.user$.getValue();
     if (!user) {
-      console.log('must be signed in to post');
-      return;
+      const toastMsg = await this.toast.create({
+        message: 'Sign in first, its free!',
+        duration: 2000
+      });
+      return toastMsg.present();
     }
 
     const post = {

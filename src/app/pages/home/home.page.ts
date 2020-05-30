@@ -33,7 +33,6 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async loadMore(event: any) {
-    console.log('loading more');
     this.infScr = event.target;
     const posts = this.sort === 'featured'
       ? await this.postService.getMoreFeatured(this.lastPost)

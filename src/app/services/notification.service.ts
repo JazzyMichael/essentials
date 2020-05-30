@@ -37,7 +37,7 @@ export class NotificationService {
       createdAt: new Date()
     };
 
-    console.log('notify - ', { followerIds, notification });
+    console.log('notify', { followerIds, notification });
 
     await this.functions.httpsCallable('notify')({ followerIds, notification }).toPromise();
   }
