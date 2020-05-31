@@ -1,4 +1,4 @@
-![Logo](/feature-graphic.png "Feature Graphic")
+![Logo](/src/assets/feature-graphic.jpg "Feature Graphic")
 
 # Essentials Anonymous
 

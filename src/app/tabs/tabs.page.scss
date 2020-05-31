@@ -9,7 +9,7 @@
 ::ng-deep .tooltip {
     font-size: 1em;
     color: white;
-    background: #36a1d3a8;
+    background: var(--ion-color-primary-tint);
 }
 
 @media (min-width: 777px) {
